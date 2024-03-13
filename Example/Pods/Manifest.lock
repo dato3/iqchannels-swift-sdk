@@ -1,0 +1,16 @@
+PODS:
+  - IQChannelsSwift (0.1.0)
+
+DEPENDENCIES:
+  - IQChannelsSwift (from `../`)
+
+EXTERNAL SOURCES:
+  IQChannelsSwift:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  IQChannelsSwift: 5fbc7e39d5cc29a048e43379b8ba91e737644c00
+
+PODFILE CHECKSUM: ebabaac3f3600c3dbef1842943d33ebd9acd0996
+
+COCOAPODS: 1.13.0
