@@ -57,7 +57,6 @@
 		72029BC46D1F5707A327E45BDC7968F4 /* Pods-IQChannelsSwift_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-IQChannelsSwift_Tests-dummy.m"; sourceTree = "<group>"; };
 		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		818DCAFB41766EEC85F5DA5DAE44D1E1 /* Pods-IQChannelsSwift_Example */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-IQChannelsSwift_Example"; path = Pods_IQChannelsSwift_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8725907B44A5E2C55161E3B441842846 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		8C8C0EF942101285D37176548E63B1D4 /* IQChannelsSwift.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = IQChannelsSwift.podspec; sourceTree = "<group>"; tabWidth = 2; };
 		9638B17ABDD87E79A3ADFFE47210DFBB /* Pods-IQChannelsSwift_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-IQChannelsSwift_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -141,7 +140,6 @@
 			isa = PBXGroup;
 			children = (
 				8C8C0EF942101285D37176548E63B1D4 /* IQChannelsSwift.podspec */,
-				8725907B44A5E2C55161E3B441842846 /* LICENSE */,
 				2A01C69D47BB77EB3BCF1548B4CABC7C /* README.md */,
 			);
 			name = Pod;

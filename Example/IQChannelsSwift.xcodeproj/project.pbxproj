@@ -41,10 +41,9 @@
 		607FACE51AFB9204008FA782 /* IQChannelsSwift_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IQChannelsSwift_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
-		92CDA9F44B5F371534540491 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		94A88EFCB6B842E32E4DAF90 /* Pods_IQChannelsSwift_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IQChannelsSwift_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		ABA88B00C31BD624EC8BB183 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		C81C89943FCEFEEF59E5E9CB /* IQChannelsSwift.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = IQChannelsSwift.podspec; path = ../IQChannelsSwift.podspec; sourceTree = "<group>"; };
+		ABA88B00C31BD624EC8BB183 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		C81C89943FCEFEEF59E5E9CB /* IQChannelsSwift.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = IQChannelsSwift.podspec; path = ../IQChannelsSwift.podspec; sourceTree = "<group>"; };
 		C953E91130C2B6F157B60EBB /* Pods_IQChannelsSwift_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IQChannelsSwift_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8F3FFFD5EE3F1EB0ED9CAF4 /* Pods-IQChannelsSwift_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IQChannelsSwift_Example.release.xcconfig"; path = "Target Support Files/Pods-IQChannelsSwift_Example/Pods-IQChannelsSwift_Example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -134,7 +133,6 @@
 			children = (
 				C81C89943FCEFEEF59E5E9CB /* IQChannelsSwift.podspec */,
 				ABA88B00C31BD624EC8BB183 /* README.md */,
-				92CDA9F44B5F371534540491 /* LICENSE */,
 			);
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
@@ -156,7 +154,6 @@
 				3456ADFD817669FE52F8C4AE /* Pods-IQChannelsSwift_Tests.debug.xcconfig */,
 				573620263BC65B722011B313 /* Pods-IQChannelsSwift_Tests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -227,6 +224,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
