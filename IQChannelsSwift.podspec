@@ -15,13 +15,11 @@ IQChannelsSwift iOS SDK
                        DESC
 
   s.homepage         = 'https://github.com/dato3/iqchannels-swift-sdk'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Daulet Tokmukhanbet' => '61043918+dato3@users.noreply.github.com' }
   s.source           = { :git => 'https://github.com/dato3/iqchannels-swift-sdk.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.swift_version = '5.0'
+  s.platform = :ios, '14.0'
   s.ios.deployment_target = '14.0'
 
   s.source_files = 'IQChannelsSwift/Classes/**/*'
@@ -33,4 +31,8 @@ IQChannelsSwift iOS SDK
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
+  
+  s.dependency 'SDWebImage', '~>5.10'
+  s.dependency 'TRVSEventSource', '0.0.8'
+   
 end

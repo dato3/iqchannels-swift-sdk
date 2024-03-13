@@ -1,5 +1,5 @@
 import XCTest
-import IQChannelsSwift
+//import IQChannelsSwift
 
 class Tests: XCTestCase {
     

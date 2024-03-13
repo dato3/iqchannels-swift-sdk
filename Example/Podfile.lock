@@ -1,15 +1,28 @@
 PODS:
-  - IQChannelsSwift (0.1.0)
+  - IQChannelsSwift (1.0.0):
+    - SDWebImage (~> 5.10)
+    - TRVSEventSource (= 0.0.8)
+  - SDWebImage (5.18.3):
+    - SDWebImage/Core (= 5.18.3)
+  - SDWebImage/Core (5.18.3)
+  - TRVSEventSource (0.0.8)
 
 DEPENDENCIES:
   - IQChannelsSwift (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - SDWebImage
+    - TRVSEventSource
 
 EXTERNAL SOURCES:
   IQChannelsSwift:
     :path: "../"
 
 SPEC CHECKSUMS:
-  IQChannelsSwift: 5fbc7e39d5cc29a048e43379b8ba91e737644c00
+  IQChannelsSwift: 750d962c430292bb447b9b4f37524ab21184e4eb
+  SDWebImage: 96e0c18ef14010b7485210e92fac888587ebb958
+  TRVSEventSource: 19fb940e0351ceb97125d46fd40cd55e339568d8
 
 PODFILE CHECKSUM: ebabaac3f3600c3dbef1842943d33ebd9acd0996
 
