@@ -18,14 +18,14 @@ extension IQClientSession {
             return nil
         }
 
-        let session = IQClientSession()
-        session.id = IQJSON.int(from: jsonObject, key: "id")
-        session.clientId = IQJSON.int(from: jsonObject, key: "clientId")
-        session.token = IQJSON.string(from: jsonObject, key: "token")
-        session.integration = IQJSON.bool(from: jsonObject, key: "integration")
-        session.integrationHash = IQJSON.string(from: jsonObject, key: "integrationHash")
-        session.integrationCredentials = IQJSON.string(from: jsonObject, key: "integrationCredentials")
-        session.createdAt = IQJSON.int(from: jsonObject, key: "createdAt")
+        var session = IQClientSession()
+        session.id = IQJSON.int(from: jsonObject, key: "Id")
+        session.clientId = IQJSON.int(from: jsonObject, key: "ClientId")
+        session.token = IQJSON.string(from: jsonObject, key: "Token")
+        session.integration = IQJSON.bool(from: jsonObject, key: "Integration")
+        session.integrationHash = IQJSON.string(from: jsonObject, key: "IntegrationHash")
+        session.integrationCredentials = IQJSON.string(from: jsonObject, key: "IntegrationCredentials")
+        session.createdAt = IQJSON.int(from: jsonObject, key: "CreatedAt")
         
         return session
     }

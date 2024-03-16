@@ -1,9 +1,9 @@
 import Foundation
 
-enum IQLogLevel: Int {
-    case debug
-    case info
-    case error
+enum IQLogLevel: String {
+    case debug = "DEBUG"
+    case info = "INFO"
+    case error = "ERROR"
 }
 
 class IQLog {

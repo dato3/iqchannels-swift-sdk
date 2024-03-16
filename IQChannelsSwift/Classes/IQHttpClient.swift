@@ -41,7 +41,7 @@ class IQHttpClient {
                 callback(nil, error)
                 return
             }
-            guard let auth = result?.value as? IQClientAuth else {
+            guard let auth = IQClientAuth.fromJSONObject(result?.value) else {
                 let error = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to parse client authentication"])
                 callback(nil, error)
                 return
@@ -59,7 +59,7 @@ class IQHttpClient {
                 callback(nil, error)
                 return
             }
-            guard let auth = result?.value as? IQClientAuth else {
+            guard let auth = IQClientAuth.fromJSONObject(result?.value) else {
                 let error = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to parse client authentication"])
                 callback(nil, error)
                 return
@@ -377,6 +377,7 @@ class IQHttpClient {
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
+        print("TOKEN EXISTS: \(token != nil)")
         if let token {
             let auth = "Client \(token)"
             request.addValue(auth, forHTTPHeaderField: "Authorization")

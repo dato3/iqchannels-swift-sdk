@@ -56,10 +56,13 @@ class IQRelationService {
             message.createdComponents = calendar.dateComponents([.year, .month, .day], from: createdDate)
         }
         
-        message.senderId = chatMessageSenderId(message)
-        message.senderDisplayName = chatMessageSenderDisplayName(message)
-        message.date = message.createdDate
-        message.messageHash = chatMessageHash(message)
+//        message.senderId = chatMessageSenderId(message)
+//        message.senderDisplayName = chatMessageSenderDisplayName(message)
+//        message.date = message.createdDate
+//        message.messageHash = chatMessageHash(message)
+        message.sender = MessageSender(senderId: chatMessageSenderId(message),
+                                       displayName: chatMessageSenderDisplayName(message))
+        message.sentDate = message.createdDate ?? Date()
     }
     
     func chatMessageSenderId(_ message: IQChatMessage) -> String {

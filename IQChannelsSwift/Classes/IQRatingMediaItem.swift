@@ -4,7 +4,7 @@ import UIKit
 class IQRatingMediaItem: JSQMediaItem {
     
     private var rating: IQRating
-    private var ratingView: IQRatingView?
+//    private var ratingView: IQRatingView?
 
     init(rating: IQRating) {
         self.rating = rating
@@ -15,17 +15,17 @@ class IQRatingMediaItem: JSQMediaItem {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func mediaView() -> UIView? {
-        if let ratingView = ratingView {
-            return ratingView
-        }
-
-        ratingView = IQRatingView.view(with: rating)
-        if let ratingView = ratingView {
+//    override func mediaView() -> UIView? {
+//        if let ratingView = ratingView {
+//            return ratingView
+//        }
+//
+//        ratingView = IQRatingView.view(with: rating)
+//        if let ratingView = ratingView {
 //            JSQMessagesMediaViewBubbleImageMasker.applyBubbleImageMask(toMediaView: ratingView, isOutgoing: false)
-        }
-        return ratingView
-    }
+//        }
+//        return ratingView
+//    }
 
     func mediaDataType() -> String {
         return "rating"

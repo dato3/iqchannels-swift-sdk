@@ -1,6 +1,6 @@
 import Foundation
 
-class IQChannelsConfig: NSObject, NSCopying, IQJSONEncodable {
+public class IQChannelsConfig: NSObject, NSCopying, IQJSONEncodable {
     
     var address: String?
     var channel: String?
@@ -12,7 +12,7 @@ class IQChannelsConfig: NSObject, NSCopying, IQJSONEncodable {
         super.init()
     }
     
-    init(address: String, channel: String) {
+    public init(address: String, channel: String) {
         self.address = address
         self.channel = channel
     }
@@ -29,7 +29,7 @@ class IQChannelsConfig: NSObject, NSCopying, IQJSONEncodable {
         return jsonDict
     }
     
-    func copy(with zone: NSZone? = nil) -> Any {
+    public func copy(with zone: NSZone? = nil) -> Any {
         let copy = IQChannelsConfig()
         copy.channel = channel
         copy.address = address

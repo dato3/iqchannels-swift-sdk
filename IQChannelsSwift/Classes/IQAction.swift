@@ -12,6 +12,19 @@ class IQAction {
     var url: String?
     var createdAt: Int
     var updatedAt: Int
+    
+    init(id: Int, chatMessageId: Int, clientId: Int, deleted: Bool, title: String? = nil, action: String? = nil, payload: String? = nil, url: String? = nil, createdAt: Int, updatedAt: Int) {
+        self.id = id
+        self.chatMessageId = chatMessageId
+        self.clientId = clientId
+        self.deleted = deleted
+        self.title = title
+        self.action = action
+        self.payload = payload
+        self.url = url
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+    }
 }
 
 extension IQAction {

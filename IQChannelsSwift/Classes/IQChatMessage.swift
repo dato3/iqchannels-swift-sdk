@@ -1,11 +1,11 @@
 import Foundation
 import UIKit
-//import JSQMessagesViewController
+import MessageKit
 
-class IQChatMessage: JSQMessageData {
+class IQChatMessage: MessageType {
     
     var id: Int = 0
-    var uID: String?
+    var uID: String = UUID().uuidString
     var chatId: Int = 0
     var sessionId: Int = 0
     var localId: Int = 0
@@ -48,11 +48,13 @@ class IQChatMessage: JSQMessageData {
     var createdDate: Date?
     var createdComponents: DateComponents?
     
-    // JSQMessageData
-    var senderId: String?
-    var senderDisplayName: String?
-    var date: Date?
-    var messageHash: UInt = 0
+    // Message Kit
+    var sender: SenderType = MessageSender(senderId: "",
+                                           displayName: "")
+    var messageId: String = UUID().uuidString
+    var sentDate: Date = Date()
+    var kind: MessageKind = .text("")
+    
     var text: String {
         if let uploadError {
             return "Ошибка: \(uploadError.localizedDescription)"
@@ -70,8 +72,9 @@ class IQChatMessage: JSQMessageData {
         }
         return _text ?? ""
     }
+    
     var isMediaMessage: Bool {
-        if let uploadError {
+        if uploadError != nil {
             return false // Display an error message.
         }
         if uploadImage != nil {
@@ -151,9 +154,9 @@ extension IQChatMessage {
             return nil
         }
         
-        var message = IQChatMessage()
+        let message = IQChatMessage()
         message.id = IQJSON.int(from: jsonObject, key: "id")
-        message.uID = IQJSON.string(from: jsonObject, key: "uID")
+        message.uID = IQJSON.string(from: jsonObject, key: "uID") ?? UUID().uuidString
         message.chatId = IQJSON.int(from: jsonObject, key: "chatId")
         message.sessionId = IQJSON.int(from: jsonObject, key: "sessionId")
         message.localId = IQJSON.int(from: jsonObject, key: "localId")
@@ -234,10 +237,10 @@ extension IQChatMessage {
         user = message.user
         file = message.file
 
-        // JSQMessageData
-        senderId = message.senderId
-        senderDisplayName = message.senderDisplayName
-        date = message.date
-        messageHash = message.messageHash
+        // Message Kit
+        sender = message.sender
+        messageId = message.messageId
+        sentDate = message.sentDate
+        kind = message.kind
     }
 }

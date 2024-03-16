@@ -23,10 +23,10 @@ extension IQResponse {
         }
 
         let response = IQResponse()
-        response.ok = IQJSON.bool(from: jsonObject, key: "ok")
-        response.error = IQError.fromJSONObject(IQJSON.dict(from: jsonObject, key: "error"))
-        response.result = jsonObject["result"]
-        response.rels = IQRelations.fromJSONObject(IQJSON.dict(from: jsonObject, key: "rels"))
+        response.ok = IQJSON.bool(from: jsonObject, key: "OK")
+        response.error = IQError.fromJSONObject(IQJSON.dict(from: jsonObject, key: "Error"))
+        response.result = jsonObject["Result"]
+        response.rels = IQRelations.fromJSONObject(IQJSON.dict(from: jsonObject, key: "Rels"))
         return response
     }
 

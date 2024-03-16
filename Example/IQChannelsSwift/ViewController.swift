@@ -7,13 +7,14 @@
 //
 
 import UIKit
+import IQChannelsSwift
 
-class ViewController: UIViewController {
+class ViewController: IQChannelMessagesViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-    }
+//    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

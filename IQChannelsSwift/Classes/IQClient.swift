@@ -20,12 +20,12 @@ extension IQClient {
             return nil
         }
 
-        var client = IQClient()
-        client.id = IQJSON.int(from: jsonObject, key: "id")
-        client.name = IQJSON.string(from: jsonObject, key: "name")
-        client.integrationId = IQJSON.string(from: jsonObject, key: "integrationId")
-        client.createdAt = IQJSON.int(from: jsonObject, key: "createdAt")
-        client.updatedAt = IQJSON.int(from: jsonObject, key: "updatedAt")
+        let client = IQClient()
+        client.id = IQJSON.int(from: jsonObject, key: "Id")
+        client.name = IQJSON.string(from: jsonObject, key: "Name")
+        client.integrationId = IQJSON.string(from: jsonObject, key: "IntegrationId")
+        client.createdAt = IQJSON.int(from: jsonObject, key: "CreatedAt")
+        client.updatedAt = IQJSON.int(from: jsonObject, key: "UpdatedAt")
         return client
     }
 

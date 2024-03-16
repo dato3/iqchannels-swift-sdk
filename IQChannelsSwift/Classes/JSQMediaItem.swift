@@ -15,7 +15,7 @@ class JSQMediaItem: NSObject, NSCoding, NSCopying, JSQMessageMediaData {
         super.init()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(didReceiveMemoryWarningNotification(_:)),
-                                               name: UIApplication.didReceiveMemoryWarningNotification,
+                                               name: NSNotification.Name.UIApplicationDidReceiveMemoryWarning,
                                                object: nil)
     }
 
@@ -29,7 +29,7 @@ class JSQMediaItem: NSObject, NSCoding, NSCopying, JSQMessageMediaData {
         super.init()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(didReceiveMemoryWarningNotification(_:)),
-                                               name: UIApplication.didReceiveMemoryWarningNotification,
+                                               name: NSNotification.Name.UIApplicationDidReceiveMemoryWarning,
                                                object: nil)
     }
 

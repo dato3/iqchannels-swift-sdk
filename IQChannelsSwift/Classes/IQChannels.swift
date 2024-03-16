@@ -4,7 +4,7 @@ import UIKit
 
 typealias IQFileURLCallback = (URL?, Error?) -> Void
 
-class IQChannels {
+public class IQChannels {
     
     let TYPING_DEBOUNCE_SEC = 1.5
     
@@ -101,9 +101,9 @@ class IQChannels {
         self.clearEvents()
         self.clearReceived()
         self.clearRead()
-//        self.clearSend()
+        self.clearSend()
         self.clearTyping()
-//        self.clearUploading()
+        self.clearUploading()
     }
     
     // MARK: - CONFIGURE
@@ -216,7 +216,7 @@ class IQChannels {
             log?.debug("Won't sign up, already signing up")
             return
         }
-        guard authing != nil else {
+        guard authing == nil else {
             log?.debug("Won't sign up, already authenticating")
             return
         }
@@ -1535,11 +1535,11 @@ extension IQChannels {
         return IQChannels()
     }()
 
-    static func configure(_ config: IQChannelsConfig) {
+    public static func configure(_ config: IQChannelsConfig) {
         instance.configure(config)
     }
 
-    static func setCustomHeaders(_ headers: [String: String]) {
+    public static func setCustomHeaders(_ headers: [String: String]) {
         instance.setCustomHeaders(headers)
     }
 
@@ -1551,11 +1551,11 @@ extension IQChannels {
         instance.state(listener)
     }
 
-    static func login(_ credentials: String) {
+    public static func login(_ credentials: String) {
         instance.login(credentials)
     }
 
-    static func loginAnonymous() {
+    public static func loginAnonymous() {
         instance.loginAnonymous()
     }
 

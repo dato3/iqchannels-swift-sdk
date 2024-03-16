@@ -14,8 +14,8 @@ extension IQClientAuth {
         }
 
         let auth = IQClientAuth()
-        auth.client = IQClient.fromJSONObject(IQJSON.dict(from: jsonObject, key: "client"))
-        auth.session = IQClientSession.fromJSONObject(IQJSON.dict(from: jsonObject, key: "session"))
+        auth.client = IQClient.fromJSONObject(IQJSON.dict(from: jsonObject, key: "Client"))
+        auth.session = IQClientSession.fromJSONObject(IQJSON.dict(from: jsonObject, key: "Session"))
         return auth
     }
 }

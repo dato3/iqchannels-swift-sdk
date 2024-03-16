@@ -25,6 +25,9 @@
     ],
     "TRVSEventSource": [
       "0.0.8"
+    ],
+    "MessageKit": [
+      "3.1.1"
     ]
   }
 }

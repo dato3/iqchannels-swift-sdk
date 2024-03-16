@@ -1,7 +1,13 @@
 PODS:
+  - InputBarAccessoryView (4.3.3):
+    - InputBarAccessoryView/Core (= 4.3.3)
+  - InputBarAccessoryView/Core (4.3.3)
   - IQChannelsSwift (1.0.0):
+    - MessageKit (= 3.1.1)
     - SDWebImage (~> 5.10)
     - TRVSEventSource (= 0.0.8)
+  - MessageKit (3.1.1):
+    - InputBarAccessoryView (~> 4.3.0)
   - SDWebImage (5.18.3):
     - SDWebImage/Core (= 5.18.3)
   - SDWebImage/Core (5.18.3)
@@ -12,6 +18,8 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - InputBarAccessoryView
+    - MessageKit
     - SDWebImage
     - TRVSEventSource
 
@@ -20,7 +28,9 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  IQChannelsSwift: 750d962c430292bb447b9b4f37524ab21184e4eb
+  InputBarAccessoryView: 8e7fc09e9cba75e0fee5da13450e15c194806f69
+  IQChannelsSwift: 555df6f260f33003673a2d0a6fe66558d642d705
+  MessageKit: a3e612a54a24f5d9ca0295760749b481afd3f2da
   SDWebImage: 96e0c18ef14010b7485210e92fac888587ebb958
   TRVSEventSource: 19fb940e0351ceb97125d46fd40cd55e339568d8
 
