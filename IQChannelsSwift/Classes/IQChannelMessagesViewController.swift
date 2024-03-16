@@ -1,5 +1,6 @@
 import Foundation
 import MessageKit
+import InputBarAccessoryView
 
 open class IQChannelMessagesViewController: MessagesViewController {
     
@@ -84,6 +85,11 @@ open class IQChannelMessagesViewController: MessagesViewController {
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
+        
+        messageInputBar.delegate = self
+        messageInputBar.inputTextView.tintColor = .red
+        messageInputBar.sendButton.setTitleColor(.red, for: .normal)
+        messageInputBar.sendButton.setTitleColor(UIColor.red.withAlphaComponent(0.3), for: .highlighted)
     }
     
     private func setupLoginIndicator() {
@@ -201,9 +207,16 @@ extension IQChannelMessagesViewController: MessagesDataSource {
     }
 }
 
+// MARK: - INPUT BAR DELEGATE
+extension IQChannelMessagesViewController: InputBarAccessoryViewDelegate {
+    
+}
+
 // MARK: - MESSAGES LAYOUT DELEGATE
 extension IQChannelMessagesViewController: MessagesLayoutDelegate {
-    
+    public func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
+        IQChannels.sendText(text)
+    }
 }
 
 // MARK: - MESSAGES DISPLAY DELEGATE

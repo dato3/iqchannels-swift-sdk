@@ -18,20 +18,20 @@ class IQChatMessageForm: IQJSONEncodable {
     
     func toJSONObject() -> [String: Any] {
         var dict = [String: Any]()
-        dict["localId"] = localId
+        dict["LocalId"] = localId
         if payload != nil {
             if let payload {
-                dict["payload"] = payload
+                dict["Payload"] = payload.rawValue
             }
         }
         if let text {
-            dict["text"] = text
+            dict["Text"] = text
         }
         if let fileId {
-            dict["fileId"] = fileId
+            dict["FileId"] = fileId
         }
         if let botpressPayload {
-            dict["botpressPayload"] = botpressPayload
+            dict["BotpressPayload"] = botpressPayload
         }
         return dict
     }
