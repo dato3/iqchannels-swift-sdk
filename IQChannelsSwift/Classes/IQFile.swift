@@ -29,21 +29,21 @@ extension IQFile {
             return nil
         }
 
-        var file = IQFile()
-        file.id = IQJSON.string(from: jsonObject, key: "id")
-        file.type = IQFileType(rawValue: IQJSON.string(from: jsonObject, key: "type") ?? "")
-        file.owner = IQFileOwnerType(rawValue: IQJSON.string(from: jsonObject, key: "owner") ?? "")
-        file.ownerClientId = IQJSON.int(from: jsonObject, key: "ownerClientId")
-        file.actor = IQActorType(rawValue: IQJSON.string(from: jsonObject, key: "actor") ?? "")
-        file.actorClientId = IQJSON.int(from: jsonObject, key: "actorClientId")
-        file.actorUserId = IQJSON.int(from: jsonObject, key: "actorUserId")
-        file.name = IQJSON.string(from: jsonObject, key: "name")
-        file.path = IQJSON.string(from: jsonObject, key: "path")
-        file.size = IQJSON.int(from: jsonObject, key: "size")
-        file.imageWidth = IQJSON.int(from: jsonObject, key: "imageWidth")
-        file.imageHeight = IQJSON.int(from: jsonObject, key: "imageHeight")
-        file.contentType = IQJSON.string(from: jsonObject, key: "contentType")
-        file.createdAt = IQJSON.int(from: jsonObject, key: "createdAt")
+        let file = IQFile()
+        file.id = IQJSON.string(from: jsonObject, key: "Id")
+        file.type = IQFileType(rawValue: IQJSON.string(from: jsonObject, key: "Type") ?? "")
+        file.owner = IQFileOwnerType(rawValue: IQJSON.string(from: jsonObject, key: "Owner") ?? "")
+        file.ownerClientId = IQJSON.int(from: jsonObject, key: "OwnerClientId")
+        file.actor = IQActorType(rawValue: IQJSON.string(from: jsonObject, key: "Actor") ?? "")
+        file.actorClientId = IQJSON.int(from: jsonObject, key: "ActorClientId")
+        file.actorUserId = IQJSON.int(from: jsonObject, key: "ActorUserId")
+        file.name = IQJSON.string(from: jsonObject, key: "Name")
+        file.path = IQJSON.string(from: jsonObject, key: "Path")
+        file.size = IQJSON.int(from: jsonObject, key: "Size") ?? 0
+        file.imageWidth = IQJSON.int(from: jsonObject, key: "ImageWidth")
+        file.imageHeight = IQJSON.int(from: jsonObject, key: "ImageHeight")
+        file.contentType = IQJSON.string(from: jsonObject, key: "ContentType")
+        file.createdAt = IQJSON.int(from: jsonObject, key: "CreatedAt") ?? 0
         return file
     }
     

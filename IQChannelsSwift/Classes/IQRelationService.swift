@@ -1,4 +1,5 @@
 import Foundation
+import MessageKit
 
 class IQRelationService {
     
@@ -55,51 +56,6 @@ class IQRelationService {
         if let createdDate = message.createdDate {
             message.createdComponents = calendar.dateComponents([.year, .month, .day], from: createdDate)
         }
-        
-//        message.senderId = chatMessageSenderId(message)
-//        message.senderDisplayName = chatMessageSenderDisplayName(message)
-//        message.date = message.createdDate
-//        message.messageHash = chatMessageHash(message)
-        message.sender = MessageSender(senderId: chatMessageSenderId(message),
-                                       displayName: chatMessageSenderDisplayName(message))
-        message.sentDate = message.createdDate ?? Date()
-    }
-    
-    func chatMessageSenderId(_ message: IQChatMessage) -> String {
-        switch message.author {
-        case .client:
-            return jsq_clientSenderId(message.clientId)
-        case .user:
-            return jsq_userSenderId(message.userId)
-        case .system:
-            return "system"
-        default:
-            return ""
-        }
-    }
-    
-    func chatMessageSenderDisplayName(_ message: IQChatMessage) -> String {
-        switch message.author {
-        case .client:
-            if let client = message.client {
-                return client.name ?? ""
-            }
-            return ""
-        case .user:
-            if let user = message.user {
-                return user.name ?? ""
-            }
-            return ""
-        default:
-            return ""
-        }
-    }
-    
-    func chatMessageHash(_ message: IQChatMessage) -> UInt {
-        var hash = 31
-        hash = hash &* 31 &+ Int(message.id ^ (message.id >> 32))
-        hash = hash &* 31 &+ Int(message.localId ^ (message.localId >> 32))
-        return UInt(hash)
     }
     
     func chatEvents(_ events: [IQChatEvent], with map: IQRelationMap?) {

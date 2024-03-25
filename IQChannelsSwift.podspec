@@ -35,5 +35,6 @@ IQChannelsSwift iOS SDK
   s.dependency 'SDWebImage', '~>5.10'
   s.dependency 'TRVSEventSource', '0.0.8'
   s.dependency 'MessageKit', '3.1.1'
+  s.dependency 'SnapKit', '5.6.0'
    
 end

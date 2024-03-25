@@ -29,23 +29,23 @@ extension IQChat {
         guard let jsonObject = object as? [String: Any] else { return nil }
 
         var chat = IQChat()
-        chat.id = IQJSON.int(from: jsonObject, key: "id")
-        chat.channelId = IQJSON.int(from: jsonObject, key: "channelId")
-        chat.clientId = IQJSON.int(from: jsonObject, key: "clientId")
-        chat.isOpen = IQJSON.bool(from: jsonObject, key: "isOpen")
+        chat.id = IQJSON.int(from: jsonObject, key: "Id") ?? 0
+        chat.channelId = IQJSON.int(from: jsonObject, key: "ChannelId") ?? 0
+        chat.clientId = IQJSON.int(from: jsonObject, key: "ClientId") ?? 0
+        chat.isOpen = IQJSON.bool(from: jsonObject, key: "IsOpen")
 
-        chat.eventId = IQJSON.int(from: jsonObject, key: "eventId")
-        chat.messageId = IQJSON.int(from: jsonObject, key: "messageId")
-        chat.sessionId = IQJSON.int(from: jsonObject, key: "sessionId")
-        chat.assigneeId = IQJSON.int(from: jsonObject, key: "assigneeId")
+        chat.eventId = IQJSON.int(from: jsonObject, key: "EventId")
+        chat.messageId = IQJSON.int(from: jsonObject, key: "MessageId")
+        chat.sessionId = IQJSON.int(from: jsonObject, key: "SessionId")
+        chat.assigneeId = IQJSON.int(from: jsonObject, key: "AssigneeId")
 
-        chat.clientUnread = IQJSON.int(from: jsonObject, key: "clientUnread")
-        chat.userUnread = IQJSON.int(from: jsonObject, key: "userUnread")
-        chat.totalMembers = IQJSON.int(from: jsonObject, key: "totalMembers")
+        chat.clientUnread = IQJSON.int(from: jsonObject, key: "ClientUnread") ?? 0
+        chat.userUnread = IQJSON.int(from: jsonObject, key: "UserUnread") ?? 0
+        chat.totalMembers = IQJSON.int(from: jsonObject, key: "TotalMembers") ?? 0
 
-        chat.createdAt = IQJSON.int(from: jsonObject, key: "createdAt")
-        chat.openedAt = IQJSON.int(from: jsonObject, key: "openedAt")
-        chat.closedAt = IQJSON.int(from: jsonObject, key: "closedAt")
+        chat.createdAt = IQJSON.int(from: jsonObject, key: "CreatedAt") ?? 0
+        chat.openedAt = IQJSON.int(from: jsonObject, key: "OpenedAt")
+        chat.closedAt = IQJSON.int(from: jsonObject, key: "ClosedAt")
 
         return chat
     }

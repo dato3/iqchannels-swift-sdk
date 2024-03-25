@@ -22,18 +22,18 @@ extension IQRating {
             return nil
         }
 
-        var rating = IQRating()
-        rating.id = IQJSON.int(from: jsonObject, key: "id")
-        rating.projectId = IQJSON.int(from: jsonObject, key: "projectId")
-        rating.ticketId = IQJSON.int(from: jsonObject, key: "ticketId")
-        rating.userId = IQJSON.int(from: jsonObject, key: "userId")
+        let rating = IQRating()
+        rating.id = IQJSON.int(from: jsonObject, key: "Id") ?? 0
+        rating.projectId = IQJSON.int(from: jsonObject, key: "ProjectId") ?? 0
+        rating.ticketId = IQJSON.int(from: jsonObject, key: "TicketId") ?? 0
+        rating.userId = IQJSON.int(from: jsonObject, key: "UserId") ?? 0
 
-        rating.state = IQRatingState(rawValue: IQJSON.string(from: jsonObject, key: "state") ?? "")
-        rating.value = IQJSON.int(from: jsonObject, key: "value")
-        rating.comment = IQJSON.string(from: jsonObject, key: "comment")
+        rating.state = IQRatingState(rawValue: IQJSON.string(from: jsonObject, key: "State") ?? "")
+        rating.value = IQJSON.int(from: jsonObject, key: "Value")
+        rating.comment = IQJSON.string(from: jsonObject, key: "Comment")
 
-        rating.createdAt = IQJSON.int(from: jsonObject, key: "createdAt")
-        rating.updatedAt = IQJSON.int(from: jsonObject, key: "updatedAt")
+        rating.createdAt = IQJSON.int(from: jsonObject, key: "CreatedAt") ?? 0
+        rating.updatedAt = IQJSON.int(from: jsonObject, key: "UpdatedAt") ?? 0
 
         return rating
     }

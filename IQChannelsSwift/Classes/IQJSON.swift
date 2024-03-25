@@ -12,9 +12,9 @@ class IQJSON {
         return val
     }
     
-    static func int(from object: [String: Any]?, key: String) -> Int {
-        guard let object = object else { return 0 }
-        guard let val = object[key] as? Int else { return 0 }
+    static func int(from object: [String: Any]?, key: String) -> Int? {
+        guard let object = object else { return nil }
+        guard let val = object[key] as? Int else { return nil }
         return val
     }
     

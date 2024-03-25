@@ -31,18 +31,18 @@ extension IQUser {
             return nil
         }
 
-        var user = IQUser()
-        user.id = IQJSON.int(from: jsonObject, key: "id")
-        user.name = IQJSON.string(from: jsonObject, key: "name")
-        user.displayName = IQJSON.string(from: jsonObject, key: "displayName")
-        user.email = IQJSON.string(from: jsonObject, key: "email")
-        user.online = IQJSON.bool(from: jsonObject, key: "online")
-        user.deleted = IQJSON.bool(from: jsonObject, key: "deleted")
-        user.avatarId = IQJSON.string(from: jsonObject, key: "avatarId")
+        let user = IQUser()
+        user.id = IQJSON.int(from: jsonObject, key: "Id") ?? 0
+        user.name = IQJSON.string(from: jsonObject, key: "Name")
+        user.displayName = IQJSON.string(from: jsonObject, key: "DisplayName")
+        user.email = IQJSON.string(from: jsonObject, key: "Email")
+        user.online = IQJSON.bool(from: jsonObject, key: "Online")
+        user.deleted = IQJSON.bool(from: jsonObject, key: "Deleted")
+        user.avatarId = IQJSON.string(from: jsonObject, key: "AvatarId")
 
-        user.createdAt = IQJSON.int(from: jsonObject, key: "createdAt")
-        user.loggedInAt = IQJSON.int(from: jsonObject, key: "loggedInAt")
-        user.lastSeenAt = IQJSON.int(from: jsonObject, key: "lastSeenAt")
+        user.createdAt = IQJSON.int(from: jsonObject, key: "CreatedAt") ?? 0
+        user.loggedInAt = IQJSON.int(from: jsonObject, key: "LoggedInAt")
+        user.lastSeenAt = IQJSON.int(from: jsonObject, key: "LastSeenAt")
 
         return user
     }

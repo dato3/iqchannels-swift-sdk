@@ -49,17 +49,46 @@ class IQChatMessage: MessageType {
     var createdComponents: DateComponents?
     
     // Message Kit
-    var sender: SenderType = MessageSender(senderId: "",
-                                           displayName: "")
-    var messageId: String = UUID().uuidString
-    var sentDate: Date = Date()
-    var kind: MessageKind = .text("")
+    var sender: SenderType {
+        return MessageSender(senderId: chatMessageSenderId(),
+                             displayName: chatMessageSenderDisplayName())
+    }
+    var messageId: String {
+        return uID
+    }
+    var sentDate: Date {
+        return createdDate ?? Date()
+    }
+    var kind: MessageKind {
+        switch payload {
+        case .text:
+            return .text(text)
+        case .file:
+            guard let file else { return .custom(nil) }
+            
+            switch file.type {
+            case .image:
+                guard let media else { return .custom(nil) }
+                return .photo(media)
+            default:
+                return .custom(nil)
+            }
+        case .singleChoice:
+            if isDropDown {
+                return .text(text)
+            } else {
+                return .custom(nil)
+            }
+        default:
+            return .custom(nil)
+        }
+    }
     
     var text: String {
         if let uploadError {
             return "Ошибка: \(uploadError.localizedDescription)"
         }
-        if isFileMessage() {
+        if isFileMessage {
             return "\(file!.name ?? ""), \(IQFileSize.unit(with: file!.size))"
         }
         if let rating {
@@ -80,19 +109,41 @@ class IQChatMessage: MessageType {
         if uploadImage != nil {
             return true
         }
-        return isImageMessage() || isPendingRatingMessage()
+        return isImageMessage || isPendingRatingMessage
     }
     
-    var media: JSQMessageMediaData? {
-        if isPendingRatingMessage() {
-            return IQRatingMediaItem(rating: rating!)
+    var isFileMessage: Bool {
+        return file != nil && file!.type == .file
+    }
+    
+    var isImageMessage: Bool {
+        return file != nil && file!.type == .image
+    }
+    
+    var isPendingRatingMessage: Bool {
+        return rating != nil && rating!.state == .pending
+    }
+    
+    var _media: MessageMediaItem?
+    
+    var media: MessageMediaItem? {
+        if let existingMedia = _media {
+            return existingMedia
         }
         
-        if !isMediaMessage {
-            return nil
-        }
+//        if isPendingRatingMessage {
+//            _media = IQRatingMediaItem(rating: _Rating)
+//            return _media
+//        }
         
-        return JSQPhotoMediaItem(image: nil)
+        guard isMediaMessage,
+              let file else { return nil }
+        
+        _media = .init(url: file.url,
+                       image: nil,
+                       placeholderImage: .init(),
+                       size: .init(width: 210, height: 150))
+        return _media
     }
     
     // Local
@@ -145,6 +196,53 @@ class IQChatMessage: MessageType {
         self.uploadData = data
         self.uploadFilename = fileName
     }
+    
+    // MARK: - METHODS
+    private func chatMessageSenderId() -> String {
+        switch author {
+        case .client:
+            return clientSenderId(clientId)
+        case .user:
+            return userSenderId(userId)
+        case .system:
+            return "system"
+        default:
+            return ""
+        }
+    }
+    
+    private func chatMessageSenderDisplayName() -> String {
+        switch author {
+        case .client:
+            if let client = client {
+                return client.name ?? ""
+            }
+            return ""
+        case .user:
+            if let user = user {
+                return user.name ?? ""
+            }
+            return ""
+        default:
+            return ""
+        }
+    }
+    
+    private func clientSenderId(_ clientId: Int?) -> String {
+        if let clientId {
+            return "client-\(clientId)"
+        } else {
+            return ""
+        }
+    }
+    
+    private func userSenderId(_ userId: Int?) -> String {
+        if let userId {
+            return "user-\(userId)"
+        } else {
+            return ""
+        }
+    }
 }
 
 extension IQChatMessage {
@@ -155,38 +253,38 @@ extension IQChatMessage {
         }
         
         let message = IQChatMessage()
-        message.id = IQJSON.int(from: jsonObject, key: "id")
-        message.uID = IQJSON.string(from: jsonObject, key: "uID") ?? UUID().uuidString
-        message.chatId = IQJSON.int(from: jsonObject, key: "chatId")
-        message.sessionId = IQJSON.int(from: jsonObject, key: "sessionId")
-        message.localId = IQJSON.int(from: jsonObject, key: "localId")
-        message.eventId = IQJSON.int(from: jsonObject, key: "eventId")
-        message.isPublic = IQJSON.bool(from: jsonObject, key: "isPublic")
+        message.id = IQJSON.int(from: jsonObject, key: "Id") ?? 0
+        message.uID = IQJSON.string(from: jsonObject, key: "UID") ?? UUID().uuidString
+        message.chatId = IQJSON.int(from: jsonObject, key: "ChatId") ?? 0
+        message.sessionId = IQJSON.int(from: jsonObject, key: "SessionId") ?? 0
+        message.localId = IQJSON.int(from: jsonObject, key: "LocalId") ?? 0
+        message.eventId = IQJSON.int(from: jsonObject, key: "EventId")
+        message.isPublic = IQJSON.bool(from: jsonObject, key: "Public")
         
-        message.author = IQActorType(rawValue: IQJSON.string(from: jsonObject, key: "author") ?? "")
-        message.clientId = IQJSON.int(from: jsonObject, key: "clientId")
-        message.userId = IQJSON.int(from: jsonObject, key: "userId")
+        message.author = IQActorType(rawValue: IQJSON.string(from: jsonObject, key: "Author") ?? "")
+        message.clientId = IQJSON.int(from: jsonObject, key: "ClientId")
+        message.userId = IQJSON.int(from: jsonObject, key: "UserId")
         
-        message.payload = IQChatPayloadType(rawValue: IQJSON.string(from: jsonObject, key: "payload") ?? "")
-        message._text = IQJSON.string(from: jsonObject, key: "text")
-        message.fileId = IQJSON.string(from: jsonObject, key: "fileId")
-        message.ratingId = IQJSON.int(from: jsonObject, key: "ratingId")
-        message.noticeId = IQJSON.int(from: jsonObject, key: "noticeId")
-        message.botpressPayload = IQJSON.string(from: jsonObject, key: "botpressPayload")
+        message.payload = IQChatPayloadType(rawValue: IQJSON.string(from: jsonObject, key: "Payload") ?? "")
+        message._text = IQJSON.string(from: jsonObject, key: "Text")
+        message.fileId = IQJSON.string(from: jsonObject, key: "FileId")
+        message.ratingId = IQJSON.int(from: jsonObject, key: "RatingId")
+        message.noticeId = IQJSON.int(from: jsonObject, key: "NoticeId")
+        message.botpressPayload = IQJSON.string(from: jsonObject, key: "BotpressPayload")
         
-        message.received = IQJSON.bool(from: jsonObject, key: "received")
-        message.read = IQJSON.bool(from: jsonObject, key: "read")
-        message.disableFreeText = IQJSON.bool(from: jsonObject, key: "disableFreeText")
-        message.isDropDown = IQJSON.bool(from: jsonObject, key: "isDropDown")
+        message.received = IQJSON.bool(from: jsonObject, key: "Received")
+        message.read = IQJSON.bool(from: jsonObject, key: "Read")
+        message.disableFreeText = IQJSON.bool(from: jsonObject, key: "DisableFreeText")
+        message.isDropDown = IQJSON.bool(from: jsonObject, key: "IsDropDown")
         
-        message.createdAt = IQJSON.int(from: jsonObject, key: "createdAt")
-        message.receivedAt = IQJSON.int(from: jsonObject, key: "receivedAt")
-        message.readAt = IQJSON.int(from: jsonObject, key: "readAt")
+        message.createdAt = IQJSON.int(from: jsonObject, key: "CreatedAt") ?? 0
+        message.receivedAt = IQJSON.int(from: jsonObject, key: "ReceivedAt")
+        message.readAt = IQJSON.int(from: jsonObject, key: "ReadAt")
         
-        message.isMy = IQJSON.bool(from: jsonObject, key: "isMy")
+        message.isMy = IQJSON.bool(from: jsonObject, key: "My")
         
-        message.singleChoices = IQSingleChoice.fromJSONArray(IQJSON.array(from: jsonObject, key: "singleChoices"))
-        message.actions = IQAction.fromJSONArray(IQJSON.array(from: jsonObject, key: "actions"))
+        message.singleChoices = IQSingleChoice.fromJSONArray(IQJSON.array(from: jsonObject, key: "SingleChoices"))
+        message.actions = IQAction.fromJSONArray(IQJSON.array(from: jsonObject, key: "Actions"))
         
         return message
     }
@@ -207,18 +305,6 @@ extension IQChatMessage {
 }
 
 extension IQChatMessage {
-
-    func isFileMessage() -> Bool {
-        return file != nil && file!.type == .file
-    }
-
-    func isImageMessage() -> Bool {
-        return file != nil && file!.type == .image
-    }
-
-    func isPendingRatingMessage() -> Bool {
-        return rating != nil && rating!.state == .pending
-    }
     
     func merge(with message: IQChatMessage) {
         // Ids
@@ -236,11 +322,5 @@ extension IQChatMessage {
         client = message.client
         user = message.user
         file = message.file
-
-        // Message Kit
-        sender = message.sender
-        messageId = message.messageId
-        sentDate = message.sentDate
-        kind = message.kind
     }
 }

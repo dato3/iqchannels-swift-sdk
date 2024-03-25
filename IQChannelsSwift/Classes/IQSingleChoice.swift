@@ -22,18 +22,18 @@ extension IQSingleChoice {
             return nil
         }
 
-        var singleChoice = IQSingleChoice()
-        singleChoice.id = IQJSON.int(from: jsonObject, key: "id")
-        singleChoice.chatMessageId = IQJSON.int(from: jsonObject, key: "chatMessageId")
-        singleChoice.clientId = IQJSON.int(from: jsonObject, key: "clientId")
+        let singleChoice = IQSingleChoice()
+        singleChoice.id = IQJSON.int(from: jsonObject, key: "id") ?? 0
+        singleChoice.chatMessageId = IQJSON.int(from: jsonObject, key: "chatMessageId") ?? 0
+        singleChoice.clientId = IQJSON.int(from: jsonObject, key: "clientId") ?? 0
         singleChoice.deleted = IQJSON.bool(from: jsonObject, key: "deleted")
 
         singleChoice.title = IQJSON.string(from: jsonObject, key: "title")
         singleChoice.value = IQJSON.string(from: jsonObject, key: "value")
         singleChoice.tag = IQJSON.string(from: jsonObject, key: "tag")
 
-        singleChoice.createdAt = IQJSON.int(from: jsonObject, key: "createdAt")
-        singleChoice.updatedAt = IQJSON.int(from: jsonObject, key: "updatedAt")
+        singleChoice.createdAt = IQJSON.int(from: jsonObject, key: "createdAt") ?? 0
+        singleChoice.updatedAt = IQJSON.int(from: jsonObject, key: "updatedAt") ?? 0
 
         return singleChoice
     }

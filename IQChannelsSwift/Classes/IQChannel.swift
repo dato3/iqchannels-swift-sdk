@@ -21,15 +21,15 @@ extension IQChannel {
         }
 
         var channel = IQChannel()
-        channel.id = IQJSON.int(from: jsonObject, key: "id")
-        channel.orgId = IQJSON.int(from: jsonObject, key: "orhId")
-        channel.name = IQJSON.string(from: jsonObject, key: "name")
-        channel.title = IQJSON.string(from: jsonObject, key: "title")
-        channel.description = IQJSON.string(from: jsonObject, key: "description")
-        channel.deleted = IQJSON.bool(from: jsonObject, key: "deleted")
-        channel.eventId = IQJSON.int(from: jsonObject, key: "eventId")
-        channel.chatEventId = IQJSON.int(from: jsonObject, key: "chatEventId")
-        channel.createdAt = IQJSON.int(from: jsonObject, key: "createdAt")
+        channel.id = IQJSON.int(from: jsonObject, key: "Id") ?? 0
+        channel.orgId = IQJSON.int(from: jsonObject, key: "OrgId") ?? 0
+        channel.name = IQJSON.string(from: jsonObject, key: "Name")
+        channel.title = IQJSON.string(from: jsonObject, key: "Title")
+        channel.description = IQJSON.string(from: jsonObject, key: "Description")
+        channel.deleted = IQJSON.bool(from: jsonObject, key: "Deleted")
+        channel.eventId = IQJSON.int(from: jsonObject, key: "EventId")
+        channel.chatEventId = IQJSON.int(from: jsonObject, key: "ChatEventId")
+        channel.createdAt = IQJSON.int(from: jsonObject, key: "CreatedAt") ?? 0
         return channel
     }
     

@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let headers = ["User-Agent": "MyAgent"]
         IQChannels.configure(config)
         IQChannels.setCustomHeaders(headers)
-        IQChannels.loginAnonymous()
+        IQChannels.login("101")
         
         window?.rootViewController = UINavigationController(rootViewController: IQChannelMessagesViewController())
         

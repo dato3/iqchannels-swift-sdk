@@ -900,7 +900,7 @@ public class IQChannels {
               message.isMediaMessage,
               let file = message.file,
               let url = file.imagePreviewUrl,
-              let media = message.media as? JSQPhotoMediaItem,
+              let media = message.media,
               media.image == nil,
               imageDownloading[messageId] == nil else {
             return
@@ -927,12 +927,12 @@ public class IQChannels {
     
     private func loadedMessage(messageId: Int, url: URL, image: UIImage) {
         guard let message = getMessageById(messageId),
-              let media = message.media as? JSQPhotoMediaItem,
+              let media = message.media,
               media.image == nil else {
             return
         }
         
-        media.image = image
+        message._media?.image = image
         imageDownloading.removeValue(forKey: messageId)
         print("Loaded a message image, messageId=\(messageId), url=\(url)")
         

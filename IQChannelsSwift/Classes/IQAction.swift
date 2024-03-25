@@ -34,16 +34,16 @@ extension IQAction {
             return nil
         }
         
-        let id = IQJSON.int(from: jsonObject, key: "id")
-        let chatMessageId = IQJSON.int(from: jsonObject, key: "chatMessageId")
-        let clientId = IQJSON.int(from: jsonObject, key: "clientId")
-        let deleted = IQJSON.bool(from: jsonObject, key: "deleted")
-        let title = IQJSON.string(from: jsonObject, key: "title") ?? ""
-        let action = IQJSON.string(from: jsonObject, key: "action") ?? ""
-        let payload = IQJSON.string(from: jsonObject, key: "payload") ?? ""
-        let url = IQJSON.string(from: jsonObject, key: "url") ?? ""
-        let createdAt = IQJSON.int(from: jsonObject, key: "createdAt")
-        let updatedAt = IQJSON.int(from: jsonObject, key: "updatedAt")
+        let id = IQJSON.int(from: jsonObject, key: "Id") ?? 0
+        let chatMessageId = IQJSON.int(from: jsonObject, key: "ChatMessageId") ?? 0
+        let clientId = IQJSON.int(from: jsonObject, key: "ClientId") ?? 0
+        let deleted = IQJSON.bool(from: jsonObject, key: "Deleted")
+        let title = IQJSON.string(from: jsonObject, key: "Title") ?? ""
+        let action = IQJSON.string(from: jsonObject, key: "Action") ?? ""
+        let payload = IQJSON.string(from: jsonObject, key: "Payload") ?? ""
+        let url = IQJSON.string(from: jsonObject, key: "URL") ?? ""
+        let createdAt = IQJSON.int(from: jsonObject, key: "CreatedAt") ?? 0
+        let updatedAt = IQJSON.int(from: jsonObject, key: "UpdatedAt") ?? 0
         
         return IQAction(id: id,
                         chatMessageId: chatMessageId,
