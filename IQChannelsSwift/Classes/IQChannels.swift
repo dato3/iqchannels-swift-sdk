@@ -956,10 +956,10 @@ public class IQChannels {
     }
     
     private func listenToEvents() {
-        guard eventsListening != nil,
+        guard eventsListening == nil,
               clientAuth != nil,
-              !messagesLoaded,
-              !(network?.isReachable() ?? false) else {
+              messagesLoaded,
+              (network?.isReachable() ?? false) else {
             return
         }
         
@@ -1303,7 +1303,7 @@ public class IQChannels {
     }
 
     func sent(_ form: IQChatMessageForm) {
-        guard sending == nil else { return }
+        guard sending != nil else { return }
         sending = nil
 
         log?.info("Sent a message, localId=\(form.localId), payload=\(form.payload ?? .invalid)")

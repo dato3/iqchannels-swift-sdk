@@ -31,21 +31,21 @@ extension IQChatEvent {
         }
 
         let event = IQChatEvent()
-        event.id = IQJSON.int(from: jsonObject, key: "id")
-        event.type = IQChatEventType(rawValue: IQJSON.string(from: jsonObject, key: "type") ?? "")
-        event.chatId = IQJSON.int(from: jsonObject, key: "chatId")
-        event.isPublic = IQJSON.bool(from: jsonObject, key: "isPublic")
-        event.transitive = IQJSON.bool(from: jsonObject, key: "transitive")
+        event.id = IQJSON.int(from: jsonObject, key: "Id")
+        event.type = IQChatEventType(rawValue: IQJSON.string(from: jsonObject, key: "Type") ?? "")
+        event.chatId = IQJSON.int(from: jsonObject, key: "ChatId")
+        event.isPublic = IQJSON.bool(from: jsonObject, key: "IsPublic")
+        event.transitive = IQJSON.bool(from: jsonObject, key: "Transitive")
 
-        event.sessionId = IQJSON.int(from: jsonObject, key: "sessionId")
-        event.messageId = IQJSON.int(from: jsonObject, key: "messageId")
-        event.memberId = IQJSON.int(from: jsonObject, key: "memberId")
+        event.sessionId = IQJSON.int(from: jsonObject, key: "SessionId")
+        event.messageId = IQJSON.int(from: jsonObject, key: "MessageId")
+        event.memberId = IQJSON.int(from: jsonObject, key: "MemberId")
 
-        event.actor = IQActorType(rawValue: IQJSON.string(from: jsonObject, key: "actor") ?? "")
-        event.clientId = IQJSON.int(from: jsonObject, key: "clientId")
-        event.userId = IQJSON.int(from: jsonObject, key: "userId")
+        event.actor = IQActorType(rawValue: IQJSON.string(from: jsonObject, key: "Actor") ?? "")
+        event.clientId = IQJSON.int(from: jsonObject, key: "ClientId")
+        event.userId = IQJSON.int(from: jsonObject, key: "UserId")
 
-        event.messages = IQChatMessage.fromJSONArray(IQJSON.array(from: jsonObject, key: "messages"))
+        event.messages = IQChatMessage.fromJSONArray(IQJSON.array(from: jsonObject, key: "Messages"))
 
         return event
     }

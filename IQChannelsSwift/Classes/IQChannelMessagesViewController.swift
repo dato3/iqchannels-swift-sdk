@@ -1,6 +1,7 @@
 import UIKit
 import MessageKit
 import SDWebImage
+import InputBarAccessoryView
 
 open class IQChannelMessagesViewController: MessagesViewController {
     
@@ -23,6 +24,7 @@ open class IQChannelMessagesViewController: MessagesViewController {
         
         setupNavBar()
         setupCollectionView()
+        messageInputBar.delegate = self
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -198,6 +200,19 @@ open class IQChannelMessagesViewController: MessagesViewController {
         
         return super.collectionView(collectionView, cellForItemAt: indexPath)
     }
+}
+
+//MARK: - INPUT BAR DELEGATE
+extension IQChannelMessagesViewController: InputBarAccessoryViewDelegate {
+    
+    public func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
+        if !messagesLoaded {
+            return
+        }
+        
+        IQChannels.sendText(text)
+    }
+
 }
 
 // MARK: - MESSAGES DATA SOURCE
@@ -442,22 +457,26 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListener {
         messagesLoaded = true
         
         messagesCollectionView.reloadData()
+        messagesCollectionView.scrollToBottom()
     }
 
     func iqMessagesCleared() {
         clearMessages()
 
         messagesCollectionView.reloadData()
+        messagesCollectionView.scrollToBottom()
     }
 
     func iq(messageAdded message: IQChatMessage) {
         messages.append(message)
         messagesCollectionView.reloadData()
+        messagesCollectionView.scrollToBottom()
     }
 
     func iq(messageSent message: IQChatMessage) {
         messages.append(message)
         messagesCollectionView.reloadData()
+        messagesCollectionView.scrollToBottom()
     }
 
     func iq(messageUpdated message: IQChatMessage) {
