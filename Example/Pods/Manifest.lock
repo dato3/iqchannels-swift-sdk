@@ -9,14 +9,14 @@ PODS:
     - TRVSEventSource (= 0.0.8)
   - MessageKit (3.1.1):
     - InputBarAccessoryView (~> 4.3.0)
-  - SDWebImage (5.18.3):
-    - SDWebImage/Core (= 5.18.3)
-  - SDWebImage/Core (5.18.3)
+  - SDWebImage (5.19.1):
+    - SDWebImage/Core (= 5.19.1)
+  - SDWebImage/Core (5.19.1)
   - SnapKit (5.6.0)
   - TRVSEventSource (0.0.8)
 
 DEPENDENCIES:
-  - IQChannelsSwift (from `../`)
+  - IQChannelsSwift (from `/Users/aralbekmuhammed/Desktop/iqchannels-swift-sdk`)
 
 SPEC REPOS:
   trunk:
@@ -28,16 +28,16 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   IQChannelsSwift:
-    :path: "../"
+    :path: "/Users/aralbekmuhammed/Desktop/iqchannels-swift-sdk"
 
 SPEC CHECKSUMS:
   InputBarAccessoryView: 8e7fc09e9cba75e0fee5da13450e15c194806f69
   IQChannelsSwift: d578d12cda7cd5a12dd9e3c640eb8be5e687d269
   MessageKit: a3e612a54a24f5d9ca0295760749b481afd3f2da
-  SDWebImage: 96e0c18ef14010b7485210e92fac888587ebb958
+  SDWebImage: 40b0b4053e36c660a764958bff99eed16610acbb
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   TRVSEventSource: 19fb940e0351ceb97125d46fd40cd55e339568d8
 
-PODFILE CHECKSUM: ebabaac3f3600c3dbef1842943d33ebd9acd0996
+PODFILE CHECKSUM: 609e6f27be0ecf6285009d486665f9a92885761b
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.14.3
