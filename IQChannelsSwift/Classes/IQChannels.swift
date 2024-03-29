@@ -606,7 +606,7 @@ public class IQChannels {
     }
     
     private func loadMessages() {
-        guard !messagesLoaded, let clientAuth, !messageListeners.isEmpty else { return }
+        guard !messagesLoaded, messagesLoading == nil, let clientAuth, !messageListeners.isEmpty else { return }
         
         let query = IQMaxIdQuery()
         messagesLoading = client?.chatsChannel(channel: config?.channel, query: query) { [weak self] messages, error in
@@ -1046,7 +1046,7 @@ public class IQChannels {
     }
 
     private func sendReceived() {
-        guard receivedSending == nil, let clientAuth, receivedQueue.count > 0 else { return }
+        guard receivedSending == nil, let clientAuth, receivedQueue.count != 0 else { return }
         var messageIds = Array(receivedQueue)
         messageIds.sort()
         receivedQueue.removeAll()
@@ -1105,7 +1105,7 @@ public class IQChannels {
     }
 
     private func sendRead() {
-        guard readSending == nil, let clientAuth, readQueue.count > 0 else { return }
+        guard readSending == nil, let clientAuth, readQueue.count != 0 else { return }
         var messageIds = Array(readQueue)
         messageIds.sort()
         readQueue.removeAll()
@@ -1284,7 +1284,7 @@ public class IQChannels {
     }
 
     func send(_ message: IQChatMessage, failedWithError error: Error) {
-        guard sending == nil else { return }
+        guard sending != nil else { return }
         sending = nil
         sendQueue.insert(message, at: 0)
 
