@@ -14,7 +14,7 @@ open class IQChannelMessagesViewController: MessagesViewController {
     private var readMessages: Set<Int> = []
     private var messagesSub: IQSubscription?
     private var messagesLoaded: Bool = false
-    
+        
     // MARK: - LIFECYCLE
     public override func viewDidLoad() {
         messagesCollectionView = MessagesCollectionView(frame: .zero,
@@ -24,7 +24,8 @@ open class IQChannelMessagesViewController: MessagesViewController {
         
         setupNavBar()
         setupCollectionView()
-        messageInputBar.delegate = self
+        setupInputBar()
+        setupObservers()
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -49,7 +50,37 @@ open class IQChannelMessagesViewController: MessagesViewController {
         visible = false
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     // MARK: - PRIVATE METHODS
+    
+    private func setupInputBar(){
+        messageInputBar.delegate = self
+        messageInputBar.separatorLine.isHidden = true
+        messageInputBar.inputTextView.backgroundColor = .init(hex: 0xF4F4F8)
+        messageInputBar.inputTextView.placeholder = "Сообщение"
+        messageInputBar.inputTextView.textContainerInset = .init(top: 9, left: 16, bottom: 9, right: 16)
+        messageInputBar.inputTextView.layer.cornerRadius = 20
+        messageInputBar.padding = .init(top: 8, left: 12, bottom: 8, right: 12)
+        messageInputBar.heightAnchor.constraint(greaterThanOrEqualToConstant: 80).isActive = true
+        messageInputBar.sendButton.configure {
+            $0.layer.cornerRadius = 20
+            $0.backgroundColor = .init(hex: 0x242729)
+            $0.setImage(.init(systemName: "arrow.up"), for: .normal)
+            $0.imageView?.tintColor = .white
+            $0.setTitle(nil, for: .normal)
+            $0.setSize(.init(width: 40, height: 40), animated: false)
+        }
+        messageInputBar.middleContentViewPadding.left = 8
+        let button = IQAttachmentButton()
+        button.addTarget(self, action: #selector(attachmentDidTap), for: .touchUpInside)
+        messageInputBar.setStackViewItems([button], forStack: .left, animated: false)
+        messageInputBar.setRightStackViewWidthConstant(to: .zero, animated: false)
+        messageInputBar.setLeftStackViewWidthConstant(to: 40, animated: false)
+    }
+
     private func setupNavBar() {
         navigationItem.title = "Сообщения"
     }
@@ -58,19 +89,76 @@ open class IQChannelMessagesViewController: MessagesViewController {
         let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout
         
         layout?.setMessageOutgoingAvatarSize(.zero)
+        layout?.setMessageIncomingAvatarSize(.init(width: 40, height: 40))
+        layout?.setMessageIncomingMessageTopLabelAlignment(.init(textAlignment: .left, textInsets: .init(top: 0, left: 68, bottom: 0, right: 0)))
+        layout?.setMessageIncomingMessagePadding(.init(top: 0, left: 8, bottom: 0, right: 40))
         layout?.setMessageIncomingAvatarPosition(AvatarPosition(vertical: .messageBottom))
         layout?.setMessageIncomingCellBottomLabelAlignment(.init(textAlignment: .left,
                                                                  textInsets: .zero))
         layout?.setMessageOutgoingCellBottomLabelAlignment(.init(textAlignment: .right,
                                                                  textInsets: .zero))
+        layout?.textMessageSizeCalculator.incomingMessageLabelInsets.bottom = 28
+        layout?.textMessageSizeCalculator.outgoingMessageLabelInsets.bottom = 28
         messagesCollectionView.register(IQCardCell.self, forCellWithReuseIdentifier: IQCardCell.cellIdentifier)
         messagesCollectionView.register(IQSingleChoicesCell.self, forCellWithReuseIdentifier: IQSingleChoicesCell.cellIdentifier)
         messagesCollectionView.register(IQStackedSingleChoicesCell.self, forCellWithReuseIdentifier: IQStackedSingleChoicesCell.cellIdentifier)
         messagesCollectionView.register(IQFilePreviewCell.self, forCellWithReuseIdentifier: IQFilePreviewCell.cellIdentifier)
         messagesCollectionView.register(MyCustomCell.self, forCellWithReuseIdentifier: MyCustomCell.cellIdentifier)
+        messagesCollectionView.register(IQTimestampMessageCell.self, forCellWithReuseIdentifier: IQTimestampMessageCell.cellIdentifier)
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
+    }
+    
+    private func setupObservers(){
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(IQChannelMessagesViewController.inputTextViewDidBeginEditing),
+                                               name: .UITextViewTextDidBeginEditing, object: messageInputBar.inputTextView)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(IQChannelMessagesViewController.inputTextViewDidEndEditing),
+                                               name: .UITextViewTextDidEndEditing, object: messageInputBar.inputTextView)
+    }
+    
+    @objc private func inputTextViewDidBeginEditing(){
+        messageInputBar.setRightStackViewWidthConstant(to: 40, animated: true)
+    }
+    
+    @objc private func inputTextViewDidEndEditing(){
+        if messageInputBar.inputTextView.text.isEmpty {
+            messageInputBar.setRightStackViewWidthConstant(to: .zero, animated: true)            
+        }
+    }
+    
+    @objc private func attachmentDidTap(){
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.addAction(.init(title: "Галерея", style: .default, handler: { _ in
+            self.photoSourceDidTap(source: .photoLibrary)
+        }))
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            alert.addAction(.init(title: "Камера", style: .default, handler: { _ in
+                self.photoSourceDidTap(source: .camera)
+            }))
+        }
+        alert.addAction(.init(title: "Файл", style: .default, handler: { _ in
+            self.fileSourceDidTap()
+        }))
+        alert.addAction(.init(title: "Cancel", style: .cancel))
+        present(alert, animated: true)
+    }
+    
+    private func photoSourceDidTap(source: UIImagePickerController.SourceType){
+        let picker = UIImagePickerController()
+        picker.sourceType = source
+        picker.delegate = self
+        picker.allowsEditing = true
+        present(picker, animated: true)
+    }
+        
+    private func fileSourceDidTap(){
+        let documentController = UIDocumentPickerViewController(forOpeningContentTypes: [.data])
+        documentController.delegate = self
+        documentController.modalPresentationStyle = .formSheet
+        present(documentController, animated: true)
     }
     
     private func getMessageIndexById(messageId: Int) -> Int {
@@ -209,7 +297,7 @@ extension IQChannelMessagesViewController: InputBarAccessoryViewDelegate {
         if !messagesLoaded {
             return
         }
-        
+        inputBar.inputTextView.text = nil
         IQChannels.sendText(text)
     }
 
@@ -226,6 +314,15 @@ extension IQChannelMessagesViewController: MessagesDataSource {
         return messages[indexPath.row]
     }
     
+    public func textCell(for message: any MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UICollectionViewCell? {
+        let cell = messagesCollectionView.dequeueReusableCell(
+          IQTimestampMessageCell.self,
+          for: indexPath)
+        cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+        return cell
+
+    }
+    
     public func numberOfSections(in messagesCollectionView: MessageKit.MessagesCollectionView) -> Int {
         return 1
     }
@@ -238,9 +335,7 @@ extension IQChannelMessagesViewController: MessagesDataSource {
 // MARK: - MESSAGES LAYOUT DELEGATE
 extension IQChannelMessagesViewController: MessagesLayoutDelegate {
     public func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
-        guard let dataSource = messagesCollectionView.messagesDataSource else { return .bubble }
-        let isSender = dataSource.isFromCurrentSender(message: message)
-        return .bubbleTail(isSender ? .bottomRight : .bottomLeft, .curved)
+        .bubble
     }
     
     public func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
@@ -264,12 +359,6 @@ extension IQChannelMessagesViewController: MessagesLayoutDelegate {
         return 20
     }
     
-    public func cellBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        if !isGroupEnd(indexPath) {
-            return 0
-        }
-        return 20
-    }
 }
 
 // MARK: - MESSAGES DISPLAY DELEGATE
@@ -289,6 +378,12 @@ extension IQChannelMessagesViewController: MessagesDisplayDelegate {
                                                                     NSAttributedStringKey.foregroundColor : UIColor.lightGray])
     }
     
+    public func backgroundColor(for message: any MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+        guard let dataSource = messagesCollectionView.messagesDataSource else { return .jsq_messageBubbleLightGray() }
+        let isSender = dataSource.isFromCurrentSender(message: message)
+        return isSender ? .init(hex: 0x242729) : .init(hex: 0xF4F4F8)
+    }
+    
     public func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
         guard shouldDisplayMessageDate(indexPath) else {
             return nil
@@ -303,8 +398,8 @@ extension IQChannelMessagesViewController: MessagesDisplayDelegate {
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .none
         let date = dateFormatter.string(from: message.sentDate)
-        return NSAttributedString(string: date, attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 12),
-                                                             NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+        return NSAttributedString(string: date, attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13),
+                                                             NSAttributedStringKey.foregroundColor : UIColor.init(hex: 0x919399)])
     }
     
     public func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
@@ -347,50 +442,43 @@ extension IQChannelMessagesViewController: MessagesDisplayDelegate {
         avatarView.backgroundColor = backgroundColor
         avatarView.set(avatar: avatar)
     }
+
+}
+
+//MARK: - DATA PICKER DELEGATE
+extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UINavigationControllerDelegate, UIDocumentPickerDelegate{
     
-    public func cellBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-        if !isGroupEnd(indexPath) {
-            return nil
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        picker.dismiss(animated: true)
+        guard let image = info[UIImagePickerControllerEditedImage] as? UIImage else { return }
+        
+        sendImage(image)
+    }
+    
+    public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        guard let url = urls.first,
+        let data = try? Data.init(contentsOf: url) else { return }
+        
+        DispatchQueue.main.async {
+            self.confirmDataSubmission(data: data, filename: url.lastPathComponent)
         }
-        
-        let message = messages[indexPath.row]
-        let style = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
-        if message.isMy {
-            style.alignment = .right
-        } else {
-            style.alignment = .left
-        }
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .none
-        dateFormatter.timeStyle = .short
-        let time = dateFormatter.string(from: message.sentDate)
-        let str = "\(time)"
-        let attributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 11.0),
-            .foregroundColor: UIColor.lightGray,
-            .paragraphStyle: style
-        ]
-        let attrStr = NSMutableAttributedString(string: str, attributes: attributes)
-        
-        if message.isMy {
-            if message.received {
-                let receivedCheckmark = NSAttributedString(string: "✓", attributes: [.foregroundColor: UIColor(hex: 0x00c853)])
-                attrStr.append(receivedCheckmark)
-            }
-            if message.read {
-                attrStr.addAttribute(.kern, value: -7, range: NSRange(location: attrStr.length - 1, length: 1))
-                let readCheckmark = NSAttributedString(string: "✓", attributes: [.foregroundColor: UIColor(hex: 0x00c853)])
-                attrStr.append(readCheckmark)
-            }
-            attrStr.addAttribute(.kern, value: 7, range: NSRange(location: attrStr.length - 1, length: 1))
-            
-        } else {
-            let space = NSAttributedString(string: " ", attributes: [.kern: 33])
-            attrStr.insert(space, at: 0)
-        }
-        
-        return attrStr
+    }
+    
+    public func confirmDataSubmission(data: Data, filename: String) {
+        let alertController = UIAlertController(title: "Подтвердите отправку файла", message: filename, preferredStyle: .actionSheet)
+        alertController.addAction(.init(title: "Отправить", style: .default, handler: { _ in
+            self.sendData(data: data, filename: filename)
+        }))
+        alertController.addAction(.init(title: "Отмена", style: .cancel))
+        present(alertController, animated: true)
+    }
+    
+    public func sendData(data: Data, filename: String?) {
+        IQChannels.sendData(data, filename: filename)
+    }
+    
+    public func sendImage(_ image: UIImage) {
+        IQChannels.sendImage(image, filename: nil)
     }
 }
 

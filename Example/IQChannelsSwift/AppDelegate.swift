@@ -21,16 +21,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.backgroundColor = UIColor.white
         window?.makeKeyAndVisible()
         
-        let config = IQChannelsConfig(address: "https://iqchannels.isimplelab.com",
+        let config = IQChannelsConfig(address: "https://sandbox.iqstore.ru/",
                                       channel: "support")
         let headers = ["User-Agent": "MyAgent"]
         IQChannels.configure(config)
         IQChannels.setCustomHeaders(headers)
         IQChannels.login("101")
         
-        window?.rootViewController = UINavigationController(rootViewController: IQChannelMessagesViewController())
+        let navigationController = UINavigationController(rootViewController: IQChannelMessagesViewController())
+        setNavigationBarAppearance(to: navigationController)
+        window?.rootViewController = navigationController
         
         return true
+    }
+    
+    private func setNavigationBarAppearance(to controller: UINavigationController){
+        let appearance = UINavigationBarAppearance()
+        appearance.backgroundColor = .white
+        appearance.shadowColor = .white
+        controller.navigationBar.standardAppearance = appearance
+        controller.navigationBar.scrollEdgeAppearance = appearance
+        controller.navigationBar.compactAppearance = appearance
+        if #available(iOS 15.0, *) {
+            controller.navigationBar.compactScrollEdgeAppearance = appearance
+        }
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
