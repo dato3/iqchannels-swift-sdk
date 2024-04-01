@@ -259,10 +259,12 @@ open class IQChannelMessagesViewController: MessagesViewController {
                 let cell = messagesCollectionView.dequeueReusableCell(IQStackedSingleChoicesCell.self, for: indexPath)
                 cell.setSingleChoices(message.singleChoices ?? [])
                 cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+                cell.stackedSingleChoicesDelegate = self
                 return cell
             } else if message.payload == .card || message.payload == .carousel {
                 let cell = messagesCollectionView.dequeueReusableCell(IQCardCell.self, for: indexPath)
                 cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+                cell.cardCellDelegate = self
                 return cell
             }
             
@@ -512,6 +514,27 @@ extension IQChannelMessagesViewController: IQChannelsStateListener {
         
         loadMessages()
     }
+}
+
+//MARK: - ChoiceDelegates
+extension IQChannelMessagesViewController: IQCardCellDelegate, IQStackedSingleChoicesCellDelegate {
+    
+    func stackedSingleChoicesCell(_ cell: IQStackedSingleChoicesCell, didSelectOption singleChoice: IQSingleChoice) {
+        IQChannels.sendSingleChoice(singleChoice)
+    }
+    
+    func cardCell(_ cell: IQCardCell, didSelectOption option: IQAction) {
+        switch option.action {
+        case "Postback", "Say something":
+            IQChannels.sendAction(option)
+        case "Open URL":
+            guard let url = URL(string: option.url ?? "") else { return }
+            
+            UIApplication.shared.open(url)
+        default: break
+        }
+    }
+    
 }
 
 // MARK: - MESSAGES LISTENER
