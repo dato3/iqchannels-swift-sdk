@@ -769,8 +769,8 @@
 		A4F0E7133A97F3DAF0C2E1D3AA40FFBE /* SDWebImageCompat.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageCompat.m; path = SDWebImage/Core/SDWebImageCompat.m; sourceTree = "<group>"; };
 		A5D36A1FC859DF0D177A7B90662D18EB /* SDWebImageDownloaderRequestModifier.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageDownloaderRequestModifier.h; path = SDWebImage/Core/SDWebImageDownloaderRequestModifier.h; sourceTree = "<group>"; };
 		A702D0A558F95847B27082F1CE382E18 /* MessagesViewController+Keyboard.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "MessagesViewController+Keyboard.swift"; path = "Sources/Controllers/MessagesViewController+Keyboard.swift"; sourceTree = "<group>"; };
-		A7473AF32BB9532000C372F7 /* IQTimestampMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQTimestampMessageCell.swift; sourceTree = "<group>"; };
-		A7473AF72BB9925F00C372F7 /* IQAttachmentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQAttachmentButton.swift; sourceTree = "<group>"; };
+		A7473AF32BB9532000C372F7 /* IQTimestampMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IQTimestampMessageCell.swift; path = IQChannelsSwift/Classes/IQTimestampMessageCell.swift; sourceTree = "<group>"; };
+		A7473AF72BB9925F00C372F7 /* IQAttachmentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IQAttachmentButton.swift; path = IQChannelsSwift/Classes/IQAttachmentButton.swift; sourceTree = "<group>"; };
 		A7CA41EA983542A8C013338737AD387E /* UIColor+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIColor+Extensions.swift"; path = "Sources/Extensions/UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		A88EECD0E0C4085258507BF9057932F0 /* SDWebImageDownloaderResponseModifier.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageDownloaderResponseModifier.h; path = SDWebImage/Core/SDWebImageDownloaderResponseModifier.h; sourceTree = "<group>"; };
 		AA5CA74F55EEE351C68942EF3170ED2B /* ConstraintAttributes.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintAttributes.swift; path = Sources/ConstraintAttributes.swift; sourceTree = "<group>"; };
@@ -1488,6 +1488,7 @@
 				C763F1DDA8038C61258AA359BEA1E237 /* IQSingleChoice.swift */,
 				51F54A2E2BEF4FE531936D22A05722D7 /* IQSingleChoicesCell.swift */,
 				927704EA8641473D7AE4DF85B2542D58 /* IQSingleChoicesView.swift */,
+				A7473AF32BB9532000C372F7 /* IQTimestampMessageCell.swift */,
 				800D0032ACC29167E123CFBFF5A1B7F6 /* IQStackedSingleChoicesCell.swift */,
 				1053CBF0FE7781EF6BB67CE538D4B6F2 /* IQSubscription.swift */,
 				AAF6F1248E4EB1035D8CA792FE0C670F /* IQTimeout.swift */,
@@ -1499,7 +1500,6 @@
 				B92E603F39066B94ACD1C9EBB96DF7AE /* UIColor+.swift */,
 				E181FDD5F520AF6A5A5273D8BBB7BA35 /* Pod */,
 				3B0A81A48D4E6CBDC1AD9D551921F808 /* Support Files */,
-				A7473AF32BB9532000C372F7 /* IQTimestampMessageCell.swift */,
 			);
 			name = IQChannelsSwift;
 			path = "/Users/aralbekmuhammed/Desktop/iqchannels-swift-sdk";
