@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.backgroundColor = UIColor.white
+        window?.overrideUserInterfaceStyle = .light
         window?.makeKeyAndVisible()
         
         let config = IQChannelsConfig(address: "https://sandbox.iqstore.ru/",
