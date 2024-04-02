@@ -53,6 +53,7 @@ final class IQCardCell: MessageContentCell {
     override func setupSubviews() {
         super.setupSubviews()
         messageContainerView.addSubview(messageStackView)
+        messageContainerView.isUserInteractionEnabled = true
         
         messageStackView.addArrangedSubview(messageLabel)
         messageStackView.addArrangedSubview(buttonsStackView)
@@ -80,11 +81,7 @@ final class IQCardCell: MessageContentCell {
         messageLabel.text = nil
         imageView.image = nil
         messageStackView.removeArrangedSubview(imageView)
-        buttonsStackView.arrangedSubviews.forEach {
-            buttonsStackView.removeArrangedSubview($0)
-            NSLayoutConstraint.deactivate($0.constraints)
-            $0.removeFromSuperview()
-        }
+        setActions([])
     }
 
     // MARK: - CONFIGURATION
@@ -134,14 +131,15 @@ final class IQCardCell: MessageContentCell {
 
     }
 
-    override func cellContentView(canHandle touchPoint: CGPoint) -> Bool {
-        return false
-    }
-    
     // MARK: - PRIVATE METHODS
     private func setActions(_ actions: [IQAction]) {
         self.actions = actions
         
+        buttonsArray = []
+        buttonsStackView.arrangedSubviews.forEach {
+            buttonsStackView.removeArrangedSubview($0)
+        }
+
         for action in actions {
             let button = getNewButton(withTitle: action.title ?? "")
             buttonsStackView.addArrangedSubview(button)

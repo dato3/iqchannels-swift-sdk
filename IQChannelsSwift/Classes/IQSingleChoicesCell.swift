@@ -51,6 +51,14 @@ final class IQSingleChoicesCell: UICollectionViewCell {
             messageLabel.delegate = delegate
         }
     }
+    
+    var singleChoiceDelegate: IQSingleChoicesViewDelegate? {
+        get {
+            singleChoicesView.delegate
+        } set {
+            singleChoicesView.delegate = newValue
+        }
+    }
 
     // MARK: - INIT
     override init(frame: CGRect) {
@@ -87,7 +95,7 @@ final class IQSingleChoicesCell: UICollectionViewCell {
         messageLabel.attributedText = nil
         messageLabel.text = nil
         singleChoicesView.clearSingleChoices()
-        singleChoicesView.delegate = nil
+        singleChoiceDelegate = nil
     }
 
     // MARK: - CONFIGURATION

@@ -143,6 +143,7 @@ open class IQChannelMessagesViewController: MessagesViewController {
             self.fileSourceDidTap()
         }))
         alert.addAction(.init(title: "Cancel", style: .cancel))
+        messageInputBar.inputTextView.resignFirstResponder()
         present(alert, animated: true)
     }
     
@@ -159,6 +160,28 @@ open class IQChannelMessagesViewController: MessagesViewController {
         documentController.delegate = self
         documentController.modalPresentationStyle = .formSheet
         present(documentController, animated: true)
+    }
+    
+    private func openMessageInBrowser(messageID: Int) {
+        let index = getMessageIndexById(messageId: messageID)
+        if (index == -1) {
+            return
+        }
+
+        guard messages.indices.contains(index) else { return }
+        let message = messages[index]
+        guard let file = message.file else { return }
+        
+        let _ = IQChannels.fileURL(file.id ?? "") { url, error in
+            guard let url, error == nil else {
+                let alert = UIAlertController(title: "Ошибка", message: error?.localizedDescription, preferredStyle: .alert)
+                alert.addAction(.init(title: "OK", style: .cancel))
+                self.present(alert, animated: true)
+                return
+            }
+            
+            UIApplication.shared.open(url)
+        }
     }
     
     private func getMessageIndexById(messageId: Int) -> Int {
@@ -254,6 +277,11 @@ open class IQChannelMessagesViewController: MessagesViewController {
             IQChannels.loadMessageMedia(message.id)
         }
         
+        if !message.isMy,
+           (messages.count - 1 == indexPath.item) {
+            setInputToolbarEnabled(!message.disableFreeText)
+        }
+        
         if case .custom = message.kind {
             if message.payload == .singleChoice {
                 let cell = messagesCollectionView.dequeueReusableCell(IQStackedSingleChoicesCell.self, for: indexPath)
@@ -271,6 +299,7 @@ open class IQChannelMessagesViewController: MessagesViewController {
             if message.file?.type == .file {
                 let cell = messagesCollectionView.dequeueReusableCell(IQFilePreviewCell.self, for: indexPath)
                 cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+                cell.delegate = self
                 return cell
             }
             
@@ -284,12 +313,17 @@ open class IQChannelMessagesViewController: MessagesViewController {
                !(message.singleChoices?.isEmpty ?? true){
                 let cell = messagesCollectionView.dequeueReusableCell(IQSingleChoicesCell.self, for: indexPath)
                 cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+                cell.singleChoiceDelegate = self
                 return cell
             }
         }
-        
-        return super.collectionView(collectionView, cellForItemAt: indexPath)
+        let cell = super.collectionView(collectionView, cellForItemAt: indexPath)
+        if let cell = cell as? MessageContentCell {
+            cell.delegate = self
+        }
+        return cell
     }
+
 }
 
 //MARK: - INPUT BAR DELEGATE
@@ -302,11 +336,15 @@ extension IQChannelMessagesViewController: InputBarAccessoryViewDelegate {
         inputBar.inputTextView.text = nil
         IQChannels.sendText(text)
     }
-
+    
+    func setInputToolbarEnabled(_ enabled: Bool) {
+        self.messageInputBar.inputTextView.isEditable = enabled
+        self.messageInputBar.leftStackView.isUserInteractionEnabled = enabled
+    }
 }
 
 // MARK: - MESSAGES DATA SOURCE
-extension IQChannelMessagesViewController: MessagesDataSource {
+extension IQChannelMessagesViewController: MessagesDataSource, MessageCellDelegate {
     public func currentSender() -> MessageKit.SenderType {
         return MessageSender(senderId: client?.senderId ?? "",
                              displayName: client?.senderDisplayName ?? "")
@@ -331,6 +369,31 @@ extension IQChannelMessagesViewController: MessagesDataSource {
     
     public func numberOfItems(inSection section: Int, in messagesCollectionView: MessagesCollectionView) -> Int {
         return messages.count
+    }
+    
+    public func didTapMessage(in cell: MessageCollectionViewCell) {
+        handleTap(at: cell)
+    }
+    
+    public func didTapImage(in cell: MessageCollectionViewCell) {
+        handleTap(at: cell)
+    }
+    
+    private func handleTap(at cell: MessageCollectionViewCell) {
+        guard let indexPath = messagesCollectionView.indexPath(for: cell),
+              messages.indices.contains(indexPath.row) else { return }
+        
+        let message = messages[indexPath.row]
+        if let file = message.file {
+            let filename = file.type?.rawValue == "image" ? "фото" : file.name
+            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            alert.addAction(.init(title: "Открыть \(filename ?? "файл") в браузере", style: .default, handler: { _ in
+                self.openMessageInBrowser(messageID: message.id)
+            }))
+            alert.addAction(.init(title: "Отмена", style: .cancel))
+            messageInputBar.inputTextView.resignFirstResponder()
+            present(alert, animated: true)
+        }
     }
 }
 
@@ -472,6 +535,7 @@ extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UIN
             self.sendData(data: data, filename: filename)
         }))
         alertController.addAction(.init(title: "Отмена", style: .cancel))
+        messageInputBar.inputTextView.resignFirstResponder()
         present(alertController, animated: true)
     }
     
@@ -517,8 +581,12 @@ extension IQChannelMessagesViewController: IQChannelsStateListener {
 }
 
 //MARK: - ChoiceDelegates
-extension IQChannelMessagesViewController: IQCardCellDelegate, IQStackedSingleChoicesCellDelegate {
+extension IQChannelMessagesViewController: IQCardCellDelegate, IQStackedSingleChoicesCellDelegate, IQSingleChoicesViewDelegate {
     
+    func singleChoicesView(_ view: IQSingleChoicesView, didSelectOption singleChoice: IQSingleChoice) {
+        IQChannels.sendSingleChoice(singleChoice)
+    }
+
     func stackedSingleChoicesCell(_ cell: IQStackedSingleChoicesCell, didSelectOption singleChoice: IQSingleChoice) {
         IQChannels.sendSingleChoice(singleChoice)
     }

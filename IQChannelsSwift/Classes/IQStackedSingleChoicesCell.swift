@@ -100,11 +100,7 @@ final class IQStackedSingleChoicesCell: UICollectionViewCell {
         messageBottomLabel.text = nil
         messageLabel.attributedText = nil
         messageLabel.text = nil
-        stackView.arrangedSubviews.forEach {
-            stackView.removeArrangedSubview($0)
-            NSLayoutConstraint.deactivate($0.constraints)
-            $0.removeFromSuperview()
-        }
+        clearSingleChoices()
     }
 
     // MARK: - CONFIGURATION
