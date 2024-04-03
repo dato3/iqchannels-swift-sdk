@@ -5,6 +5,12 @@ import InputBarAccessoryView
 
 open class IQChannelMessagesViewController: MessagesViewController {
     
+    //MARK: - Views
+
+    private var messagesIndicator = IQActivityIndicator()
+    private var loginIndicator = IQActivityIndicator()
+    private var refreshControl = UIRefreshControl()
+    
     // MARK: - PROPERTIES
     private var client: IQClient?
     private var messages: [IQChatMessage] = []
@@ -13,6 +19,7 @@ open class IQChannelMessagesViewController: MessagesViewController {
     private var visible: Bool = false
     private var readMessages: Set<Int> = []
     private var messagesSub: IQSubscription?
+    private var moreMessagesLoading: IQSubscription?    
     private var messagesLoaded: Bool = false
         
     // MARK: - LIFECYCLE
@@ -22,6 +29,8 @@ open class IQChannelMessagesViewController: MessagesViewController {
         
         super.viewDidLoad()
         
+        setupIndicators()
+        setupRefreshControl()
         setupNavBar()
         setupCollectionView()
         setupInputBar()
@@ -80,6 +89,22 @@ open class IQChannelMessagesViewController: MessagesViewController {
         messageInputBar.setRightStackViewWidthConstant(to: .zero, animated: false)
         messageInputBar.setLeftStackViewWidthConstant(to: 40, animated: false)
     }
+    
+    private func setupRefreshControl(){
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        messagesCollectionView.refreshControl = refreshControl
+    }
+    
+    private func setupIndicators(){
+        view.addSubview(loginIndicator)
+        view.addSubview(messagesIndicator)
+        loginIndicator.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
+        messagesIndicator.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
+    }
 
     private func setupNavBar() {
         navigationItem.title = "Сообщения"
@@ -126,6 +151,14 @@ open class IQChannelMessagesViewController: MessagesViewController {
     @objc private func inputTextViewDidEndEditing(){
         if messageInputBar.inputTextView.text.isEmpty {
             messageInputBar.setRightStackViewWidthConstant(to: .zero, animated: true)            
+        }
+    }
+    
+    @objc private func refresh() {
+        if messagesLoaded {
+            self.loadMoreMessages()
+        } else {
+            self.loadMessages()
         }
     }
     
@@ -562,14 +595,21 @@ extension IQChannelMessagesViewController: IQChannelsStateListener {
 
     func iqLoggedOut(_ state: IQChannelsState) {
         self.state = state
+        loginIndicator.stopAnimating()
     }
 
     func iqAwaitingNetwork(_ state: IQChannelsState) {
         self.state = state
+        
+        loginIndicator.label.text = "Ожидание сети..."
+        loginIndicator.startAnimating()
     }
 
     func iqAuthenticating(_ state: IQChannelsState) {
         self.state = state
+        
+        loginIndicator.label.text = "Авторизация..."
+        loginIndicator.startAnimating()
     }
 
     func iqAuthenticated(_ state: IQChannelsState, client: IQClient) {
@@ -577,6 +617,8 @@ extension IQChannelMessagesViewController: IQChannelsStateListener {
         self.client = client
         
         loadMessages()
+        loginIndicator.label.text = ""
+        loginIndicator.stopAnimating()
     }
 }
 
@@ -606,8 +648,9 @@ extension IQChannelMessagesViewController: IQCardCellDelegate, IQStackedSingleCh
 }
 
 // MARK: - MESSAGES LISTENER
-extension IQChannelMessagesViewController: IQChannelsMessagesListener {
+extension IQChannelMessagesViewController: IQChannelsMessagesListener, IQChannelsMoreMessagesListener {
     private func clearMessages() {
+        messagesIndicator.stopAnimating()
         messagesSub?.unsubscribe()
 
         messages = []
@@ -615,17 +658,44 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListener {
         messagesSub = nil
         messagesLoaded = false
     }
+    
+    private func loadMoreMessages() {
+        guard let client, messagesLoaded else { return }
+
+        moreMessagesLoading = IQChannels.moreMessages(self)
+        refreshControl.beginRefreshing()
+    }
+    
+    func iqMoreMessagesLoaded() {
+        guard moreMessagesLoading != nil else { return }
+
+        moreMessagesLoading = nil
+        refreshControl.endRefreshing()
+    }
+    
+    func iqMoreMessagesError(_ error: Error) {
+        guard moreMessagesLoading != nil else { return }
+
+        moreMessagesLoading = nil;
+        refreshControl.endRefreshing()
+        present(UIAlertController(error: error), animated: true)
+    }
 
     private func loadMessages() {
         guard let client, messagesSub == nil, !messagesLoaded else { return }
 
         messagesSub = IQChannels.messages(self)
+        messagesIndicator.label.text = "Загрузка..."
+        messagesIndicator.startAnimating()
     }
 
     func iq(messagesError error: Error) {
         guard messagesSub != nil else { return }
 
         messagesSub = nil
+        messagesIndicator.stopAnimating()
+        refreshControl.endRefreshing()
+        present(UIAlertController(error: error), animated: true)
     }
 
     func iq(messages: [IQChatMessage]) {
@@ -635,6 +705,8 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListener {
         readMessages = []
         messagesLoaded = true
         
+        messagesIndicator.stopAnimating()
+        refreshControl.endRefreshing()
         messagesCollectionView.reloadData()
         messagesCollectionView.scrollToBottom()
     }
@@ -642,7 +714,10 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListener {
     func iqMessagesCleared() {
         clearMessages()
 
+        refreshControl.endRefreshing()
+        
         messagesCollectionView.reloadData()
+        messagesIndicator.stopAnimating()
         messagesCollectionView.scrollToBottom()
     }
 
