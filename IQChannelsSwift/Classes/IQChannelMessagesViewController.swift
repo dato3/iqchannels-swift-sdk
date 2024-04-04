@@ -71,6 +71,7 @@ open class IQChannelMessagesViewController: MessagesViewController {
         messageInputBar.inputTextView.backgroundColor = .init(hex: 0xF4F4F8)
         messageInputBar.inputTextView.placeholder = "Сообщение"
         messageInputBar.inputTextView.textContainerInset = .init(top: 9, left: 16, bottom: 9, right: 16)
+        messageInputBar.inputTextView.placeholderLabelInsets.left += 2.5
         messageInputBar.inputTextView.layer.cornerRadius = 20
         messageInputBar.padding = .init(top: 8, left: 12, bottom: 8, right: 12)
         messageInputBar.heightAnchor.constraint(greaterThanOrEqualToConstant: 80).isActive = true
