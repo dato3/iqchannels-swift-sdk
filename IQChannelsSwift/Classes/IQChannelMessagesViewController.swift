@@ -123,8 +123,6 @@ open class IQChannelMessagesViewController: MessagesViewController {
                                                                  textInsets: .zero))
         layout?.setMessageOutgoingCellBottomLabelAlignment(.init(textAlignment: .right,
                                                                  textInsets: .zero))
-        layout?.textMessageSizeCalculator.incomingMessageLabelInsets.bottom = 28
-        layout?.textMessageSizeCalculator.outgoingMessageLabelInsets.bottom = 28
         messagesCollectionView.register(IQCardCell.self, forCellWithReuseIdentifier: IQCardCell.cellIdentifier)
         messagesCollectionView.register(IQSingleChoicesCell.self, forCellWithReuseIdentifier: IQSingleChoicesCell.cellIdentifier)
         messagesCollectionView.register(IQStackedSingleChoicesCell.self, forCellWithReuseIdentifier: IQStackedSingleChoicesCell.cellIdentifier)
@@ -176,7 +174,7 @@ open class IQChannelMessagesViewController: MessagesViewController {
         alert.addAction(.init(title: "Файл", style: .default, handler: { _ in
             self.fileSourceDidTap()
         }))
-        alert.addAction(.init(title: "Cancel", style: .cancel))
+        alert.addAction(.init(title: "Отмена", style: .cancel))
         messageInputBar.inputTextView.resignFirstResponder()
         present(alert, animated: true)
     }
