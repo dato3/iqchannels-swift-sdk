@@ -310,6 +310,14 @@ open class IQChannelMessagesViewController: MessagesViewController {
             setInputToolbarEnabled(!message.disableFreeText)
         }
         
+        if !message.isMy {
+            if (visible) {
+                IQChannels.markAsRead(message.id)
+            } else {
+                readMessages.update(with: message.id)
+            }
+        }
+        
         if case .custom = message.kind {
             if message.payload == .singleChoice {
                 let cell = messagesCollectionView.dequeueReusableCell(IQStackedSingleChoicesCell.self, for: indexPath)

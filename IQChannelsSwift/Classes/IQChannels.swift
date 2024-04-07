@@ -1143,6 +1143,8 @@ public class IQChannels {
     }
 
     private func sentRead(messageIds: [Int]) {
+        guard readSending != nil else { return }
+        
         readSending = nil
         readSendAttempt = 0
         log?.info("Sent read message ids, count=\(messageIds.count)")
