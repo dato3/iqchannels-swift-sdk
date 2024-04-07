@@ -345,11 +345,13 @@ open class IQChannelMessagesViewController: MessagesViewController {
                 cell.setSingleChoices(message.singleChoices ?? [])
                 cell.configure(with: message, at: indexPath, and: messagesCollectionView)
                 cell.stackedSingleChoicesDelegate = self
+                cell.delegate = self
                 return cell
             } else if message.payload == .card || message.payload == .carousel {
                 let cell = messagesCollectionView.dequeueReusableCell(IQCardCell.self, for: indexPath)
                 cell.configure(with: message, at: indexPath, and: messagesCollectionView)
                 cell.cardCellDelegate = self
+                cell.delegate = self
                 return cell
             }
             
@@ -371,6 +373,7 @@ open class IQChannelMessagesViewController: MessagesViewController {
                 let cell = messagesCollectionView.dequeueReusableCell(IQSingleChoicesCell.self, for: indexPath)
                 cell.configure(with: message, at: indexPath, and: messagesCollectionView)
                 cell.singleChoiceDelegate = self
+                cell.delegate = self
                 return cell
             }
         }
@@ -426,8 +429,8 @@ extension IQChannelMessagesViewController: MessagesDataSource, MessageCellDelega
           IQTimestampMessageCell.self,
           for: indexPath)
         cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+        cell.delegate = self
         return cell
-
     }
     
     public func numberOfSections(in messagesCollectionView: MessageKit.MessagesCollectionView) -> Int {
@@ -444,6 +447,10 @@ extension IQChannelMessagesViewController: MessagesDataSource, MessageCellDelega
     
     public func didTapImage(in cell: MessageCollectionViewCell) {
         handleTap(at: cell)
+    }
+    
+    public func didSelectURL(_ url: URL) {
+        UIApplication.shared.open(url)
     }
     
     private func handleTap(at cell: MessageCollectionViewCell) {
@@ -508,6 +515,16 @@ extension IQChannelMessagesViewController: MessagesDisplayDelegate {
         
         return NSAttributedString(string: displayName, attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 11),
                                                                     NSAttributedStringKey.foregroundColor : UIColor.lightGray])
+    }
+    
+    public func detectorAttributes(for detector: DetectorType, and message: any MessageType, at indexPath: IndexPath) -> [NSAttributedString.Key : Any] {
+        [
+            .foregroundColor: UIColor.link
+        ]
+    }
+    
+    public func enabledDetectors(for message: any MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [DetectorType] {
+        [.url, .address, .phoneNumber, .date, .transitInformation, .mention, .hashtag]
     }
     
     public func backgroundColor(for message: any MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
