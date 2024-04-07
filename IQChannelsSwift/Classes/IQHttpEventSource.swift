@@ -44,7 +44,7 @@ class IQHttpEventSource: NSObject, TRVSEventSourceDelegate {
 
     func eventSource(_ eventSource: TRVSEventSource, didFailWithError error: Error?) {
         var finalError: Error? = error
-        if let error, error.localizedDescription.isEmpty {
+        if error?.localizedDescription.isEmpty ?? true {
             finalError = NSError.iq_clientError(withLocalizedDescription: NSLocalizedString("Unknown event stream error", comment: ""))
         }
         callback?(nil, finalError)

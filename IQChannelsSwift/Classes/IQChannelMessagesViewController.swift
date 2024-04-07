@@ -126,6 +126,7 @@ open class IQChannelMessagesViewController: MessagesViewController {
         messagesCollectionView.register(IQCardCell.self, forCellWithReuseIdentifier: IQCardCell.cellIdentifier)
         messagesCollectionView.register(IQSingleChoicesCell.self, forCellWithReuseIdentifier: IQSingleChoicesCell.cellIdentifier)
         messagesCollectionView.register(IQStackedSingleChoicesCell.self, forCellWithReuseIdentifier: IQStackedSingleChoicesCell.cellIdentifier)
+        messagesCollectionView.register(MyCustomCell.self, forCellWithReuseIdentifier: MyCustomCell.cellIdentifier)
         messagesCollectionView.register(IQFilePreviewCell.self, forCellWithReuseIdentifier: IQFilePreviewCell.cellIdentifier)
         messagesCollectionView.register(IQTimestampMessageCell.self, forCellWithReuseIdentifier: IQTimestampMessageCell.cellIdentifier)
         messagesCollectionView.messagesDataSource = self
@@ -329,6 +330,10 @@ open class IQChannelMessagesViewController: MessagesViewController {
                 cell.delegate = self
                 return cell
             }
+            
+            let cell = messagesCollectionView.dequeueReusableCell(MyCustomCell.self, for: indexPath)
+            cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+            return cell
         } else if case .text = message.kind {
             if message.payload == .singleChoice,
                message.isDropDown,
@@ -737,5 +742,11 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListener, IQChannel
     
     func iq(messageTyping user: IQUser?) {
         
+    }
+}
+
+open class MyCustomCell: UICollectionViewCell {
+    open func configure(with message: MessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
+        self.contentView.backgroundColor = UIColor.clear
     }
 }
