@@ -127,7 +127,6 @@ open class IQChannelMessagesViewController: MessagesViewController {
         messagesCollectionView.register(IQSingleChoicesCell.self, forCellWithReuseIdentifier: IQSingleChoicesCell.cellIdentifier)
         messagesCollectionView.register(IQStackedSingleChoicesCell.self, forCellWithReuseIdentifier: IQStackedSingleChoicesCell.cellIdentifier)
         messagesCollectionView.register(IQFilePreviewCell.self, forCellWithReuseIdentifier: IQFilePreviewCell.cellIdentifier)
-        messagesCollectionView.register(MyCustomCell.self, forCellWithReuseIdentifier: MyCustomCell.cellIdentifier)
         messagesCollectionView.register(IQTimestampMessageCell.self, forCellWithReuseIdentifier: IQTimestampMessageCell.cellIdentifier)
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
@@ -295,10 +294,6 @@ open class IQChannelMessagesViewController: MessagesViewController {
     }
     
     override open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let messagesDataSource = messagesCollectionView.messagesDataSource else {
-            fatalError("Ouch. nil data source for messages")
-        }
-        
         if isSectionReservedForTypingIndicator(indexPath.section){
             return super.collectionView(collectionView, cellForItemAt: indexPath)
         }
@@ -334,10 +329,6 @@ open class IQChannelMessagesViewController: MessagesViewController {
                 cell.delegate = self
                 return cell
             }
-            
-            let cell = messagesCollectionView.dequeueReusableCell(MyCustomCell.self, for: indexPath)
-            cell.configure(with: message, at: indexPath, and: messagesCollectionView)
-            return cell
         } else if case .text = message.kind {
             if message.payload == .singleChoice,
                message.isDropDown,
@@ -513,31 +504,25 @@ extension IQChannelMessagesViewController: MessagesDisplayDelegate {
         if let avatarImage = user.avatarImage {
             let avatar: Avatar = .init(image: avatarImage)
             avatarView.set(avatar: avatar)
-        }
-
-        if let avatarURL = user.avatarURL {
-            let m = SDWebImageManager.shared
-            m.loadImage(with: avatarURL, options: [], progress: nil) { [weak self] (image, data, error, cacheType, finished, imageURL) in
-                DispatchQueue.main.async {
-                    guard let self = self, let image = image else { return }
-                    user.avatarImage = image
-                    let index: Int
-                    if message.isMy {
-                        index = self.getMyMessageByLocalId(localId: message.localId)
-                    } else {
-                        index = self.getMessageIndexById(messageId: message.id)
-                    }
-                    let path = IndexPath(item: index, section: 0)
-                    messagesCollectionView.reloadItems(at: [path])
+        } else if let url = user.avatarURL {
+            SDWebImageManager.shared.loadImage(with: url, progress: nil) { [weak self] image, _, _, _, _, _ in
+                guard let self else { return }
+                
+                self.messages[indexPath.row].user?.avatarImage = image
+                let index: Int
+                if message.isMy {
+                    index = self.getMyMessageByLocalId(localId: message.localId)
+                } else {
+                    index = self.getMessageIndexById(messageId: message.id)
                 }
+                messagesCollectionView.reloadItems(at: [.init(item: index, section: 0)])
             }
+        } else {
+            let initials = String((message.user?.name ?? "").prefix(1))
+            let avatar: Avatar = .init(initials: initials)
+            avatarView.set(avatar: avatar)
         }
-
-        let initials = String((message.user?.name ?? "").prefix(1))
-        let backgroundColor = UIColor.paletteColorFromString(string: user.name)
-        let avatar: Avatar = .init(initials: initials)
-        avatarView.backgroundColor = backgroundColor
-        avatarView.set(avatar: avatar)
+        avatarView.backgroundColor = UIColor.paletteColorFromString(string: user.name)
     }
 
 }
@@ -752,11 +737,5 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListener, IQChannel
     
     func iq(messageTyping user: IQUser?) {
         
-    }
-}
-
-open class MyCustomCell: UICollectionViewCell {
-    open func configure(with message: MessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
-        self.contentView.backgroundColor = UIColor.red
     }
 }

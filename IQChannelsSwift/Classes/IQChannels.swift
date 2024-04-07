@@ -896,13 +896,15 @@ public class IQChannels {
     }
     
     func loadMessageMedia(messageId: Int) {
+        imageDownloading[messageId]?.cancel()
+        imageDownloading.removeValue(forKey: messageId)
+        
         guard let message = getMessageById(messageId),
               message.isMediaMessage,
               let file = message.file,
               let url = file.imagePreviewUrl,
               let media = message.media,
-              media.image == nil,
-              imageDownloading[messageId] == nil else {
+              media.image == nil else {
             return
         }
         
@@ -916,7 +918,9 @@ public class IQChannels {
                 }
             }
         }
-        imageDownloading[messageId] = operation
+        if let operation {
+            imageDownloading.updateValue(operation, forKey: messageId)
+        }
         print("Loading a message image, messageId=\(messageId), url=\(url)")
     }
     
