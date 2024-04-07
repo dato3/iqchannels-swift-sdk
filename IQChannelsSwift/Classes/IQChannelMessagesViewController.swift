@@ -793,7 +793,24 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListener, IQChannel
     }
     
     func iq(messagesRemoved messages: [IQChatMessage]) {
+        guard let messagesSub = messagesSub else { return }
         
+        var remoteMessages = messages
+        
+        var index = 0
+        var paths = [IndexPath]()
+        for localMessage in self.messages {
+            for remoteMessage in remoteMessages {
+                if localMessage.id == remoteMessage.id {
+                    paths.append(IndexPath(item: index, section: 0))
+                }
+            }
+            
+            index += 1
+        }
+        
+        self.messages.remove(elementsAtIndices: paths.map { $0.item })
+        messagesCollectionView.deleteItems(at: paths)
     }
     
     func iq(messageTyping user: IQUser?) {
@@ -812,5 +829,32 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListener, IQChannel
 open class MyCustomCell: UICollectionViewCell {
     open func configure(with message: MessageType, at indexPath: IndexPath, and messagesCollectionView: MessagesCollectionView) {
         self.contentView.backgroundColor = UIColor.clear
+    }
+}
+
+extension Array {
+    mutating func remove(elementsAtIndices indicesToRemove: [Int]) -> [Element] {
+        var shouldRemove: [Bool] = .init(repeating: false, count: count)
+        
+        for ix in indicesToRemove {
+            shouldRemove[ix] = true
+        }
+        
+        // Copy the removed elements in the specified order.
+        let removedElements = indicesToRemove.map { self[$0] }
+        
+        // Compact the array
+        var j = 0
+        for i in 0..<count {
+            if !shouldRemove[i] {
+                self[j] = self[i]
+                j+=1
+            }
+        }
+        
+        // Remove the extra elements from the end of the array.
+        self.removeLast(count-j)
+        
+        return removedElements
     }
 }
