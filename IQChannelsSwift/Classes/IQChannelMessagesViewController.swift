@@ -18,6 +18,8 @@ open class IQChannelMessagesViewController: MessagesViewController {
     private var state: IQChannelsState = .loggedOut
     private var visible: Bool = false
     private var readMessages: Set<Int> = []
+    private var typingTimer: Timer?
+    private var typingUser: IQUser?
     private var messagesSub: IQSubscription?
     private var moreMessagesLoading: IQSubscription?    
     private var messagesLoaded: Bool = false
@@ -94,6 +96,13 @@ open class IQChannelMessagesViewController: MessagesViewController {
     private func setupRefreshControl(){
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         messagesCollectionView.refreshControl = refreshControl
+    }
+    
+    private func setupTypingTimer() {
+        typingTimer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(onTick), userInfo: nil, repeats: false)
+        if typingTimer == nil {
+            typingTimer?.invalidate()
+        }
     }
     
     private func setupIndicators(){
@@ -186,12 +195,24 @@ open class IQChannelMessagesViewController: MessagesViewController {
         picker.allowsEditing = true
         present(picker, animated: true)
     }
+    
+    @objc
+    private func onTick() {
+        setTypingIndicatorViewHidden(true, animated: true)
+        typingUser = nil
+        typingTimer?.invalidate()
+    }
         
     private func fileSourceDidTap(){
         let documentController = UIDocumentPickerViewController(forOpeningContentTypes: [.data])
         documentController.delegate = self
         documentController.modalPresentationStyle = .formSheet
         present(documentController, animated: true)
+    }
+    
+    private func extendByTime(_ seconds: TimeInterval) {
+        let newFireDate = (typingTimer?.fireDate ?? Date()).addingTimeInterval(seconds)
+        typingTimer?.fireDate = newFireDate
     }
     
     private func openMessageInBrowser(messageID: Int) {
@@ -373,6 +394,10 @@ extension IQChannelMessagesViewController: InputBarAccessoryViewDelegate {
         IQChannels.sendText(text)
     }
     
+    public func inputBar(_ inputBar: InputBarAccessoryView, textViewTextDidChangeTo text: String) {
+        IQChannels.typing()
+    }
+    
     func setInputToolbarEnabled(_ enabled: Bool) {
         self.messageInputBar.inputTextView.isEditable = enabled
         self.messageInputBar.leftStackView.isUserInteractionEnabled = enabled
@@ -388,6 +413,12 @@ extension IQChannelMessagesViewController: MessagesDataSource, MessageCellDelega
     
     public func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessageKit.MessagesCollectionView) -> MessageKit.MessageType {
         return messages[indexPath.row]
+    }
+    
+    public func typingIndicator(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UICollectionViewCell {
+         let indicator = messagesCollectionView.dequeueReusableCell(TypingIndicatorCell.self, for: indexPath)
+        indicator.insets.left = 40
+        return indicator
     }
     
     public func textCell(for message: any MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UICollectionViewCell? {
@@ -749,7 +780,15 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListener, IQChannel
     }
     
     func iq(messageTyping user: IQUser?) {
+        if isTypingIndicatorHidden {
+            setupTypingTimer()
+        } else {
+            extendByTime(2)
+        }
         
+        typingUser = user
+        setTypingIndicatorViewHidden(false, animated: false)
+        messagesCollectionView.scrollToBottom()
     }
 }
 
