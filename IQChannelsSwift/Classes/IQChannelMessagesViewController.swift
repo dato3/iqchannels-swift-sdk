@@ -73,7 +73,8 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
         messageInputBar.inputTextView.backgroundColor = .init(hex: 0xF4F4F8)
         messageInputBar.inputTextView.placeholder = "Сообщение"
         messageInputBar.inputTextView.textContainerInset = .init(top: 9, left: 16, bottom: 9, right: 16)
-        messageInputBar.inputTextView.placeholderLabelInsets.left += 2.5
+        messageInputBar.inputTextView.placeholderLabelInsets.left += 4
+        messageInputBar.inputTextView.tintColor = .init(hex: 0xDD0A34)
         messageInputBar.inputTextView.layer.cornerRadius = 20
         messageInputBar.padding = .init(top: 8, left: 12, bottom: 8, right: 12)
         messageInputBar.heightAnchor.constraint(greaterThanOrEqualToConstant: 80).isActive = true
@@ -147,22 +148,6 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
     }
     
     private func setupObservers(){
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(IQChannelMessagesViewController.inputTextViewDidBeginEditing),
-                                               name: .UITextViewTextDidBeginEditing, object: messageInputBar.inputTextView)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(IQChannelMessagesViewController.inputTextViewDidEndEditing),
-                                               name: .UITextViewTextDidEndEditing, object: messageInputBar.inputTextView)
-    }
-    
-    @objc private func inputTextViewDidBeginEditing(){
-        messageInputBar.setRightStackViewWidthConstant(to: 40, animated: true)
-    }
-    
-    @objc private func inputTextViewDidEndEditing(){
-        if messageInputBar.inputTextView.text.isEmpty {
-            messageInputBar.setRightStackViewWidthConstant(to: .zero, animated: true)            
-        }
     }
     
     @objc private func refresh() {
@@ -410,6 +395,15 @@ extension IQChannelMessagesViewController: InputBarAccessoryViewDelegate {
     
     public func inputBar(_ inputBar: InputBarAccessoryView, textViewTextDidChangeTo text: String) {
         IQChannels.typing()
+        if text.isEmpty {
+            if messageInputBar.rightStackViewWidthConstant != .zero {
+                messageInputBar.setRightStackViewWidthConstant(to: .zero, animated: true)
+            }
+        } else {
+            if messageInputBar.rightStackViewWidthConstant != 40 {
+                messageInputBar.setRightStackViewWidthConstant(to: 40, animated: true)
+            }
+        }
     }
     
     func setInputToolbarEnabled(_ enabled: Bool) {
@@ -506,7 +500,7 @@ extension IQChannelMessagesViewController: MessagesLayoutDelegate {
             return 0
         }
         
-        return 20
+        return 40
     }
     
 }
@@ -524,7 +518,7 @@ extension IQChannelMessagesViewController: MessagesDisplayDelegate {
             return nil
         }
         
-        return NSAttributedString(string: displayName, attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 11),
+        return NSAttributedString(string: displayName, attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 11),
                                                                     NSAttributedStringKey.foregroundColor : UIColor.lightGray])
     }
     
@@ -554,11 +548,11 @@ extension IQChannelMessagesViewController: MessagesDisplayDelegate {
         
         let dateFormatter = DateFormatter()
         dateFormatter.doesRelativeDateFormatting = true
-        dateFormatter.locale = NSLocale.current
+        dateFormatter.locale = .init(identifier: "ru_RU")
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .none
         let date = dateFormatter.string(from: message.sentDate)
-        return NSAttributedString(string: date, attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13),
+        return NSAttributedString(string: date, attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 13),
                                                              NSAttributedStringKey.foregroundColor : UIColor.init(hex: 0x919399)])
     }
     
