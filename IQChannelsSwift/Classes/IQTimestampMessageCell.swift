@@ -19,7 +19,7 @@ class IQTimestampMessageCell: TextMessageCell {
     
     private let readImageView = UIImageView()
     
-    private let dateLabel = UILabel()
+    let dateLabel = UILabel()
     
     private var labelToImageConstraint: Constraint?
     

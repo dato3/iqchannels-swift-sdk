@@ -140,6 +140,7 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
         messagesCollectionView.register(IQFilePreviewCell.self, forCellWithReuseIdentifier: IQFilePreviewCell.cellIdentifier)
         messagesCollectionView.register(IQTimestampMessageCell.self, forCellWithReuseIdentifier: IQTimestampMessageCell.cellIdentifier)
         messagesCollectionView.register(IQMediaMessageCell.self, forCellWithReuseIdentifier: IQMediaMessageCell.cellIdentifier)
+        messagesCollectionView.register(IQRatingCell.self, forCellWithReuseIdentifier: IQRatingCell.cellIdentifier)
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
@@ -363,6 +364,13 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
             cell.configure(with: message, at: indexPath, and: messagesCollectionView)
             return cell
         } else if case .text = message.kind {
+            if message.isPendingRatingMessage{
+                let cell = messagesCollectionView.dequeueReusableCell(IQRatingCell.self, for: indexPath)
+                cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+                cell.delegate = self
+                cell.ratingDelegate = self
+                return cell
+            }
             if message.payload == .singleChoice,
                message.isDropDown,
                messages.count - 1 == indexPath.row,
@@ -681,7 +689,14 @@ extension IQChannelMessagesViewController: IQChannelsStateListener {
 }
 
 //MARK: - ChoiceDelegates
-extension IQChannelMessagesViewController: IQCardCellDelegate, IQStackedSingleChoicesCellDelegate, IQSingleChoicesViewDelegate {
+extension IQChannelMessagesViewController: IQCardCellDelegate, IQStackedSingleChoicesCellDelegate, IQSingleChoicesViewDelegate, IQRatingCellDelegate {
+    
+    func cell(didTapSendButtonFrom cell: IQRatingCell, value: Int) {
+        guard let indexPath = messagesCollectionView.indexPath(for: cell),
+        let ratingId = messages[indexPath.row].ratingId else { return }
+        
+        IQChannels.rate(ratingId, value: value)
+    }
     
     func singleChoicesView(_ view: IQSingleChoicesView, didSelectOption singleChoice: IQSingleChoice) {
         IQChannels.sendSingleChoice(singleChoice)
