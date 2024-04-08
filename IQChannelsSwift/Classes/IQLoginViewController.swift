@@ -2,7 +2,7 @@
 //  IQLoginViewController.swift
 //  IQChannelsSwift
 //
-//  Created by Muhammed Aralbek on 05.04.2024.
+//  Created by Daulet on 05.04.2024.
 //
 
 import UIKit

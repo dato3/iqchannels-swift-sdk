@@ -2,7 +2,7 @@
 //  IQStarRatingView.swift
 //  IQChannelsSwift
 //
-//  Created by Muhammed Aralbek on 09.04.2024.
+//  Created by Daulet on 09.04.2024.
 //
 
 import UIKit
