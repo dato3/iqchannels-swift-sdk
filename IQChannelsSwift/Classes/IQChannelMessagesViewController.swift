@@ -3,7 +3,7 @@ import MessageKit
 import SDWebImage
 import InputBarAccessoryView
 
-open class IQChannelMessagesViewController: MessagesViewController {
+open class IQChannelMessagesViewController: MessagesViewController, UIGestureRecognizerDelegate {
     
     //MARK: - Views
 
@@ -141,6 +141,9 @@ open class IQChannelMessagesViewController: MessagesViewController {
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
+        let gr = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        gr.delegate = self
+        messagesCollectionView.addGestureRecognizer(gr)
     }
     
     private func setupObservers(){
@@ -168,6 +171,14 @@ open class IQChannelMessagesViewController: MessagesViewController {
         } else {
             self.loadMessages()
         }
+    }
+    
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        true
+    }
+    
+    @objc private func dismissKeyboard(){
+        messageInputBar.inputTextView.resignFirstResponder()
     }
     
     @objc private func attachmentDidTap(){
