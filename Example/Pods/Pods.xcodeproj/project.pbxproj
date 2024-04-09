@@ -255,7 +255,6 @@
 		A7473AF82BB9925F00C372F7 /* IQAttachmentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7473AF72BB9925F00C372F7 /* IQAttachmentButton.swift */; };
 		A7473B0F2BBDE87200C372F7 /* IQActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7473B0E2BBDE87200C372F7 /* IQActivityIndicator.swift */; };
 		A7473B112BBDEB4900C372F7 /* UIAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7473B102BBDEB4900C372F7 /* UIAlertView.swift */; };
-		A7473B1A2BBF49C000C372F7 /* IQLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7473B182BBF49C000C372F7 /* IQLoginViewController.swift */; };
 		A7473B212BC1E95000C372F7 /* IQTextMessageSizeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7473B202BC1E95000C372F7 /* IQTextMessageSizeCalculator.swift */; };
 		A7473B232BC482FC00C372F7 /* IQMediaMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7473B222BC482FC00C372F7 /* IQMediaMessageCell.swift */; };
 		A7473B272BC499BF00C372F7 /* IQRatingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7473B262BC499BF00C372F7 /* IQRatingCell.swift */; };
@@ -780,7 +779,6 @@
 		A7473AF72BB9925F00C372F7 /* IQAttachmentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IQAttachmentButton.swift; path = IQChannelsSwift/Classes/IQAttachmentButton.swift; sourceTree = "<group>"; };
 		A7473B0E2BBDE87200C372F7 /* IQActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IQActivityIndicator.swift; path = IQChannelsSwift/Classes/IQActivityIndicator.swift; sourceTree = "<group>"; };
 		A7473B102BBDEB4900C372F7 /* UIAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UIAlertView.swift; path = IQChannelsSwift/Classes/UIAlertView.swift; sourceTree = "<group>"; };
-		A7473B182BBF49C000C372F7 /* IQLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IQLoginViewController.swift; path = IQChannelsSwift/Classes/IQLoginViewController.swift; sourceTree = "<group>"; };
 		A7473B202BC1E95000C372F7 /* IQTextMessageSizeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IQTextMessageSizeCalculator.swift; path = IQChannelsSwift/Classes/IQTextMessageSizeCalculator.swift; sourceTree = "<group>"; };
 		A7473B222BC482FC00C372F7 /* IQMediaMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IQMediaMessageCell.swift; path = IQChannelsSwift/Classes/IQMediaMessageCell.swift; sourceTree = "<group>"; };
 		A7473B262BC499BF00C372F7 /* IQRatingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IQRatingCell.swift; path = IQChannelsSwift/Classes/IQRatingCell.swift; sourceTree = "<group>"; };
@@ -1455,7 +1453,6 @@
 				A7473B262BC499BF00C372F7 /* IQRatingCell.swift */,
 				A7473B2A2BC4B8B100C372F7 /* IQStarRatingView.swift */,
 				A7473B222BC482FC00C372F7 /* IQMediaMessageCell.swift */,
-				A7473B182BBF49C000C372F7 /* IQLoginViewController.swift */,
 				A7473B102BBDEB4900C372F7 /* UIAlertView.swift */,
 				A7473B0E2BBDE87200C372F7 /* IQActivityIndicator.swift */,
 				A7473AF72BB9925F00C372F7 /* IQAttachmentButton.swift */,
@@ -2441,7 +2438,6 @@
 				A734C08B555FBF8CA7F87D810F7C67D4 /* IQChat.swift in Sources */,
 				6FFFE269447A5EDE7A90538D42CCADFD /* IQChatEvent.swift in Sources */,
 				08DC60A1A6DC51F2CDD8096AE7884523 /* IQChatEventQuery.swift in Sources */,
-				A7473B1A2BBF49C000C372F7 /* IQLoginViewController.swift in Sources */,
 				192F5D88E233B39C12C45E7A7AD05709 /* IQChatEventType.swift in Sources */,
 				1FA6F00248BA604D78DA5F59C039A927 /* IQChatMessage.swift in Sources */,
 				CF5E2715D82F618D127AFC9655372418 /* IQChatMessageForm.swift in Sources */,

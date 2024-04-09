@@ -621,7 +621,9 @@ extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UIN
     
     public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let url = urls.first,
-        let data = try? Data.init(contentsOf: url) else { return }
+            url.startAccessingSecurityScopedResource() else { return }
+        defer { url.stopAccessingSecurityScopedResource() }
+        guard let data = try? Data(contentsOf: url) else { return }
         
         DispatchQueue.main.async {
             self.confirmDataSubmission(data: data, filename: url.lastPathComponent)
