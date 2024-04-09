@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import IQChannelsSwift
 
-public class IQLoginViewController: UIViewController, UITextFieldDelegate {
+public class LoginViewController: UIViewController, UITextFieldDelegate {
     
     private lazy var serverField: UITextField = {
         let field = UITextField()
