@@ -516,7 +516,7 @@ extension IQChannelMessagesViewController: MessagesLayoutDelegate {
             return 0
         }
         
-        return 40
+        return 50
     }
     
 }
@@ -614,7 +614,14 @@ extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UIN
     
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         picker.dismiss(animated: true)
-        guard let image = info[UIImagePickerControllerEditedImage] as? UIImage else { return }
+        guard let image = info[UIImagePickerControllerEditedImage] as? UIImage,
+        let url = info[UIImagePickerControllerImageURL] as? URL else { return }
+        
+        if url.pathExtension == "gif",
+           let data = try? Data(contentsOf: url){
+            sendData(data: data, filename: nil)
+            return
+        }
         
         sendImage(image)
     }
@@ -773,7 +780,7 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListener, IQChannel
         present(UIAlertController(error: error), animated: true)
     }
 
-    func iq(messages: [IQChatMessage]) {
+    func iq(messages: [IQChatMessage], moreMessages: Bool) {
         guard messagesSub != nil else { return }
         
         self.messages = messages
@@ -783,7 +790,9 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListener, IQChannel
         messagesIndicator.stopAnimating()
         refreshControl.endRefreshing()
         messagesCollectionView.reloadData()
-        messagesCollectionView.scrollToBottom()
+        if !moreMessages {
+            messagesCollectionView.scrollToBottom()
+        }
     }
 
     func iqMessagesCleared() {
