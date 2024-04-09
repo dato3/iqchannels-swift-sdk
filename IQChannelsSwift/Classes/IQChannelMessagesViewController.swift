@@ -141,6 +141,7 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
         messagesCollectionView.register(IQTimestampMessageCell.self, forCellWithReuseIdentifier: IQTimestampMessageCell.cellIdentifier)
         messagesCollectionView.register(IQMediaMessageCell.self, forCellWithReuseIdentifier: IQMediaMessageCell.cellIdentifier)
         messagesCollectionView.register(IQRatingCell.self, forCellWithReuseIdentifier: IQRatingCell.cellIdentifier)
+        messagesCollectionView.register(IQTypingIndicatorCell.self, forCellWithReuseIdentifier: IQTypingIndicatorCell.cellIdentifier)
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
@@ -433,8 +434,8 @@ extension IQChannelMessagesViewController: MessagesDataSource, MessageCellDelega
     }
     
     public func typingIndicator(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UICollectionViewCell {
-         let indicator = messagesCollectionView.dequeueReusableCell(TypingIndicatorCell.self, for: indexPath)
-        indicator.insets.left = 40
+        let indicator = messagesCollectionView.dequeueReusableCell(IQTypingIndicatorCell.self, for: indexPath)
+        indicator.textLabel.text = "\(typingUser?.displayName ?? "") печатает..."
         return indicator
     }
     
