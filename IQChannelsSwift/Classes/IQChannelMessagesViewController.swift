@@ -9,6 +9,7 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
 
     private var messagesIndicator = IQActivityIndicator()
     private var loginIndicator = IQActivityIndicator()
+    private var scrollDownButton = IQScrollDownButton()
     private var refreshControl = UIRefreshControl()
     
     // MARK: - PROPERTIES
@@ -34,6 +35,7 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
         setupIndicators()
         setupRefreshControl()
         setupNavBar()
+        setupScrollDownButton()
         setupCollectionView()
         setupInputBar()
         setupObservers()
@@ -92,6 +94,20 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
         messageInputBar.setStackViewItems([button], forStack: .left, animated: false)
         messageInputBar.setRightStackViewWidthConstant(to: .zero, animated: false)
         messageInputBar.setLeftStackViewWidthConstant(to: 40, animated: false)
+    }
+    
+    private func setupScrollDownButton(){
+        view.addSubview(scrollDownButton)
+        scrollDownButton.alpha = 0
+        scrollDownButton.addTarget(self, action: #selector(scrollDownDidTap), for: .touchUpInside)
+        scrollDownButton.snp.makeConstraints { make in
+            make.right.equalToSuperview().inset(8)
+            if #available(iOS 15.0, *) {
+                make.bottom.equalTo(view.keyboardLayoutGuide.snp.top).inset(-8)
+            }else{
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(-8)
+            }
+        }
     }
     
     private func setupRefreshControl(){
@@ -153,6 +169,10 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
     private func setupObservers(){
     }
     
+    @objc private func scrollDownDidTap() {
+        messagesCollectionView.scrollToBottom(animated: true)
+    }
+
     @objc private func refresh() {
         if messagesLoaded {
             self.loadMoreMessages()
@@ -312,6 +332,19 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
         return messageDateComponents.year != prevDateComponents.year ||
         messageDateComponents.month != prevDateComponents.month ||
         messageDateComponents.day != prevDateComponents.day
+    }
+        
+    open override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let shouldHide = !((collectionView.contentOffset.y + collectionView.frame.height) < collectionView.contentSize.height - 100)
+        let targetAlpha: CGFloat = shouldHide ? 0 : 1
+        if shouldHide {
+            scrollDownButton.dotHidden = true
+        }
+        guard scrollDownButton.alpha != targetAlpha else { return }
+        
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            self?.scrollDownButton.alpha = targetAlpha
+        }
     }
     
     override open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -808,8 +841,8 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListener, IQChannel
 
     func iq(messageAdded message: IQChatMessage) {
         messages.append(message)
+        scrollDownButton.dotHidden = false
         messagesCollectionView.reloadData()
-        messagesCollectionView.scrollToBottom()
     }
 
     func iq(messageSent message: IQChatMessage) {
@@ -862,7 +895,6 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListener, IQChannel
         
         typingUser = user
         setTypingIndicatorViewHidden(false, animated: false)
-        messagesCollectionView.scrollToBottom()
     }
 }
 
