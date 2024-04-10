@@ -53,8 +53,9 @@ class IQTimestampView: UIView {
         dateLabel.attributedText = attributedString
         
         readImageView.isHidden = !(message.isMy && (message.read || message.received))
-        readImageView.image = message.read ? .init(named: "doubleCheckmark") : .init(named: "singleCheckmark")
+        let doubleCheckmarkImage = UIImage(named: "doubleCheckmark", in: .channelsAssetBundle(), with: nil)
+        let singleCheckmarkImage = UIImage(named: "singleCheckmark", in: .channelsAssetBundle(), with: nil)
+        readImageView.image = message.read ? doubleCheckmarkImage : singleCheckmarkImage
         labelToImageConstraint?.isActive = message.isMy && message.read
-
     }
 }

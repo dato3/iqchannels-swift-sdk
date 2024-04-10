@@ -24,9 +24,9 @@ IQChannelsSwift iOS SDK
 
   s.source_files = 'IQChannelsSwift/Classes/**/*'
   
-  # s.resource_bundles = {
-  #   'IQChannelsSwift' => ['IQChannelsSwift/Assets/*.png']
-  # }
+  s.resource_bundles = {
+      'IQChannelsSwift' => ['IQChannelsSwift/Assets/Assets.xcassets']
+  }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
