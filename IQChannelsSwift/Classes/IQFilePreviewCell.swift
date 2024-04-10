@@ -22,7 +22,9 @@ final class IQFilePreviewCell: MessageContentCell {
     var messageLabel = MessageLabel()
     var fileImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "doc")
+        imageView.image = UIImage(named: "doc",
+                                  in: .channelsAssetBundle(),
+                                  compatibleWith: nil)
         imageView.contentMode = .bottom
         return imageView
     }()
