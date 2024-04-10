@@ -2,6 +2,7 @@ import UIKit
 import MessageKit
 import SDWebImage
 import InputBarAccessoryView
+import SwiftMessages
 
 open class IQChannelMessagesViewController: MessagesViewController, UIGestureRecognizerDelegate {
     
@@ -390,6 +391,12 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
         return cell
     }
 
+    open override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
+        super.collectionView(collectionView, performAction: action, forItemAt: indexPath, withSender: sender)
+        
+        let view = IQMessageView.view()
+        SwiftMessages.show(view: view)
+    }
 }
 
 //MARK: - INPUT BAR DELEGATE
