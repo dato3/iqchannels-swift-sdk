@@ -10,6 +10,7 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
     private var messagesIndicator = IQActivityIndicator()
     private var loginIndicator = IQActivityIndicator()
     private var scrollDownButton = IQScrollDownButton()
+    private var chatUnavailableView = IQChatUnavailableView()
     private var refreshControl = UIRefreshControl()
     
     // MARK: - PROPERTIES
@@ -35,6 +36,7 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
         setupIndicators()
         setupRefreshControl()
         setupNavBar()
+        setupChatUnavailableView()
         setupScrollDownButton()
         setupCollectionView()
         setupInputBar()
@@ -119,6 +121,15 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
         typingTimer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(onTick), userInfo: nil, repeats: false)
         if typingTimer == nil {
             typingTimer?.invalidate()
+        }
+    }
+    
+    private func setupChatUnavailableView(){
+        view.addSubview(chatUnavailableView)
+        chatUnavailableView.isHidden = true
+        chatUnavailableView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.horizontalEdges.equalToSuperview().inset(16)
         }
     }
     
@@ -705,12 +716,14 @@ extension IQChannelMessagesViewController: IQChannelsStateListener {
     func iqLoggedOut(_ state: IQChannelsState) {
         self.state = state
         loginIndicator.stopAnimating()
+        chatUnavailableView.isHidden = false
     }
 
     func iqAwaitingNetwork(_ state: IQChannelsState) {
         self.state = state
         
         loginIndicator.label.text = "Ожидание сети..."
+        chatUnavailableView.isHidden = true
         loginIndicator.startAnimating()
     }
 
@@ -718,6 +731,7 @@ extension IQChannelMessagesViewController: IQChannelsStateListener {
         self.state = state
         
         loginIndicator.label.text = "Авторизация..."
+        chatUnavailableView.isHidden = true
         loginIndicator.startAnimating()
     }
 
@@ -727,6 +741,7 @@ extension IQChannelMessagesViewController: IQChannelsStateListener {
         
         loadMessages()
         loginIndicator.label.text = ""
+        chatUnavailableView.isHidden = true
         loginIndicator.stopAnimating()
     }
 }
