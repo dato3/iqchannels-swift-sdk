@@ -676,10 +676,10 @@ extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UIN
     
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         picker.dismiss(animated: true)
-        guard let image = info[UIImagePickerControllerEditedImage] as? UIImage,
-        let url = info[UIImagePickerControllerImageURL] as? URL else { return }
+        guard let image = info[UIImagePickerControllerEditedImage] as? UIImage else { return }
         
-        if url.pathExtension == "gif",
+        if let url = info[UIImagePickerControllerImageURL] as? URL,
+           url.pathExtension == "gif",
            let data = try? Data(contentsOf: url){
             sendData(data: data, filename: nil)
             return
@@ -897,7 +897,9 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListener, IQChannel
         if index > 0 {
             paths.append(IndexPath(item: index - 1, section: 0))
         }
-        messagesCollectionView.reloadItems(at: paths)
+        DispatchQueue.main.async {
+            self.messagesCollectionView.reloadItems(at: paths)            
+        }
     }
     
     func iq(messagesRemoved messages: [IQChatMessage]) {

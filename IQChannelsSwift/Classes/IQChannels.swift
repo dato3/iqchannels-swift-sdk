@@ -1500,8 +1500,12 @@ public class IQChannels {
 
     // MARK: RATINGS
     func rate(ratingId: Int, value: Int) {
-        _ = client?.ratingsRate(ratingId, value: value) { error in
-            
+        _ = client?.ratingsRate(ratingId, value: value) { [weak self] error in
+            if error == nil, let self,
+               let index = self.messages.lastIndex(where: { $0.ratingId == ratingId }){
+                self.messages[index].rating?.state = .rated
+                self.messageListeners.forEach { $0.iq(messageUpdated: self.messages[index]) }
+            }
         }
         log?.info("Rated \(ratingId) as \(value)")
     }
