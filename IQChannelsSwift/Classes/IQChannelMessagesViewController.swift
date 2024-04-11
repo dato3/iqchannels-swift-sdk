@@ -126,11 +126,16 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
     
     private func setupChatUnavailableView(){
         view.addSubview(chatUnavailableView)
-        chatUnavailableView.isHidden = true
+        setChatUnavailable(hidden: true)
         chatUnavailableView.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.horizontalEdges.equalToSuperview().inset(16)
         }
+    }
+    
+    private func setChatUnavailable(hidden: Bool) {
+        chatUnavailableView.isHidden = hidden
+        messagesCollectionView.isHidden = !hidden
     }
     
     private func setupIndicators(){
@@ -716,14 +721,14 @@ extension IQChannelMessagesViewController: IQChannelsStateListener {
     func iqLoggedOut(_ state: IQChannelsState) {
         self.state = state
         loginIndicator.stopAnimating()
-        chatUnavailableView.isHidden = false
+        setChatUnavailable(hidden: false)
     }
 
     func iqAwaitingNetwork(_ state: IQChannelsState) {
         self.state = state
         
         loginIndicator.label.text = "Ожидание сети..."
-        chatUnavailableView.isHidden = true
+        setChatUnavailable(hidden: true)
         loginIndicator.startAnimating()
     }
 
@@ -731,7 +736,7 @@ extension IQChannelMessagesViewController: IQChannelsStateListener {
         self.state = state
         
         loginIndicator.label.text = "Авторизация..."
-        chatUnavailableView.isHidden = true
+        setChatUnavailable(hidden: true)
         loginIndicator.startAnimating()
     }
 
@@ -741,7 +746,7 @@ extension IQChannelMessagesViewController: IQChannelsStateListener {
         
         loadMessages()
         loginIndicator.label.text = ""
-        chatUnavailableView.isHidden = true
+        setChatUnavailable(hidden: true)
         loginIndicator.stopAnimating()
     }
 }
