@@ -352,7 +352,7 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
     }
         
     open override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let shouldHide = !((collectionView.contentOffset.y + collectionView.frame.height) < collectionView.contentSize.height - 100)
+        let shouldHide = shouldHideScrollDownButton()
         let targetAlpha: CGFloat = shouldHide ? 0 : 1
         if shouldHide {
             scrollDownButton.dotHidden = true
@@ -362,6 +362,11 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
         UIView.animate(withDuration: 0.2) { [weak self] in
             self?.scrollDownButton.alpha = targetAlpha
         }
+    }
+    
+    func shouldHideScrollDownButton() -> Bool {
+        let offset = messagesCollectionView.contentOffset.y + messagesCollectionView.frame.height
+        return !(offset < messagesCollectionView.contentSize.height - 100)
     }
     
     override open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -870,6 +875,9 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListener, IQChannel
         messages.append(message)
         scrollDownButton.dotHidden = false
         messagesCollectionView.reloadData()
+        if shouldHideScrollDownButton() {
+            messagesCollectionView.scrollToBottom(animated: true)
+        }
     }
 
     func iq(messageSent message: IQChatMessage) {
