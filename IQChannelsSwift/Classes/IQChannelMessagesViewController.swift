@@ -105,11 +105,7 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
         scrollDownButton.addTarget(self, action: #selector(scrollDownDidTap), for: .touchUpInside)
         scrollDownButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(8)
-            if #available(iOS 15.0, *) {
-                make.bottom.equalTo(view.keyboardLayoutGuide.snp.top).inset(-8)
-            }else{
-                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(-8)
-            }
+            make.bottom.equalToSuperview().inset(0).priority(.high)
         }
     }
     
@@ -184,6 +180,12 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
     }
     
     private func setupObservers(){
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(IQChannelMessagesViewController.inputBarDidBeginEditing),
+                                               name: NSNotification.Name.UITextViewTextDidBeginEditing, object: messageInputBar.inputTextView)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(IQChannelMessagesViewController.keyboardFrameDidChange),
+                                               name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
     }
     
     @objc private func scrollDownDidTap() {
@@ -350,17 +352,19 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
         messageDateComponents.month != prevDateComponents.month ||
         messageDateComponents.day != prevDateComponents.day
     }
+    
+    open override func setTypingIndicatorViewHidden(_ isHidden: Bool, animated: Bool, whilePerforming updates: (() -> Void)? = nil, completion: ((Bool) -> Void)? = nil) {
+        super.setTypingIndicatorViewHidden(isHidden, animated: animated, whilePerforming: updates, completion: completion)
         
-    open override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let shouldHide = shouldHideScrollDownButton()
-        let targetAlpha: CGFloat = shouldHide ? 0 : 1
-        if shouldHide {
-            scrollDownButton.dotHidden = true
+        if !isHidden {
+            scrollToBottomIfNeeded()
         }
-        guard scrollDownButton.alpha != targetAlpha else { return }
-        
-        UIView.animate(withDuration: 0.2) { [weak self] in
-            self?.scrollDownButton.alpha = targetAlpha
+    }
+    
+    func scrollToBottomIfNeeded(animated: Bool = true){
+        if shouldHideScrollDownButton(){
+            messagesCollectionView.scrollToBottom(animated: animated)
+            scrollDownButton.dotHidden = true
         }
     }
     
@@ -444,6 +448,19 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
         }
         return cell
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let shouldHide = shouldHideScrollDownButton()
+        let targetAlpha: CGFloat = shouldHide ? 0 : 1
+        if shouldHide {
+            scrollDownButton.dotHidden = true
+        }
+        guard scrollDownButton.alpha != targetAlpha else { return }
+        
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            self?.scrollDownButton.alpha = targetAlpha
+        }
+    }
 
     open override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
         super.collectionView(collectionView, performAction: action, forItemAt: indexPath, withSender: sender)
@@ -456,6 +473,24 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
 //MARK: - INPUT BAR DELEGATE
 extension IQChannelMessagesViewController: InputBarAccessoryViewDelegate {
     
+    @objc func inputBarDidBeginEditing(){
+        DispatchQueue.main.async {
+            self.scrollToBottomIfNeeded()
+        }
+    }
+    
+    @objc func keyboardFrameDidChange(_ notification: Notification){
+        guard let rect = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? CGRect else { return }
+        
+        let height = self.view.frame.height - rect.origin.y
+        UIView.animate(withDuration: 0.2) {
+            self.scrollDownButton.snp.updateConstraints { make in
+                make.bottom.equalToSuperview().inset(height + 16).priority(.high)
+            }
+            self.view.layoutIfNeeded()
+        }
+    }
+        
     public func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
         if !messagesLoaded {
             return
@@ -578,13 +613,14 @@ extension IQChannelMessagesViewController: MessagesLayoutDelegate {
             return 0
         }
         
-        return 50
+        return 56
     }
     
 }
 
 // MARK: - MESSAGES DISPLAY DELEGATE
 extension IQChannelMessagesViewController: MessagesDisplayDelegate {
+    
     public func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
         guard isGroupStart(indexPath) else {
             return nil
@@ -644,25 +680,30 @@ extension IQChannelMessagesViewController: MessagesDisplayDelegate {
             avatarView.isHidden = true
             return
         }
+        let initials = String((message.user?.name ?? "").prefix(1))
 
         if let avatarImage = user.avatarImage {
             let avatar: Avatar = .init(image: avatarImage)
             avatarView.set(avatar: avatar)
         } else if let url = user.avatarURL {
+            avatarView.set(avatar: .init(initials: initials))
             SDWebImageManager.shared.loadImage(with: url, progress: nil) { [weak self] image, _, _, _, _, _ in
-                guard let self else { return }
-                
-                self.messages[indexPath.row].user?.avatarImage = image
-                let index: Int
-                if message.isMy {
-                    index = self.getMyMessageByLocalId(localId: message.localId)
-                } else {
-                    index = self.getMessageIndexById(messageId: message.id)
+                DispatchQueue.main.async {
+                    guard let self else { return }
+                    
+                    let index: Int
+                    if message.isMy {
+                        index = self.getMyMessageByLocalId(localId: message.localId)
+                    } else {
+                        index = self.getMessageIndexById(messageId: message.id)
+                    }
+                    self.messages[index].user?.avatarImage = image
+                    if let cell = (messagesCollectionView.cellForItem(at: .init(item: index, section: 0)) as? MessageContentCell) {
+                        cell.avatarView.set(avatar: .init(image: image))
+                    }
                 }
-                messagesCollectionView.reloadItems(at: [.init(item: index, section: 0)])
             }
         } else {
-            let initials = String((message.user?.name ?? "").prefix(1))
             let avatar: Avatar = .init(initials: initials)
             avatarView.set(avatar: avatar)
         }
@@ -875,15 +916,13 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListener, IQChannel
         messages.append(message)
         scrollDownButton.dotHidden = false
         messagesCollectionView.reloadData()
-        if shouldHideScrollDownButton() {
-            messagesCollectionView.scrollToBottom(animated: true)
-        }
+        scrollToBottomIfNeeded()
     }
 
     func iq(messageSent message: IQChatMessage) {
         messages.append(message)
         messagesCollectionView.reloadData()
-        messagesCollectionView.scrollToBottom()
+        scrollToBottomIfNeeded()
     }
 
     func iq(messageUpdated message: IQChatMessage) {
@@ -898,7 +937,8 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListener, IQChannel
             paths.append(IndexPath(item: index - 1, section: 0))
         }
         DispatchQueue.main.async {
-            self.messagesCollectionView.reloadItems(at: paths)            
+            self.messagesCollectionView.reloadItems(at: paths)      
+            self.scrollToBottomIfNeeded()
         }
     }
     
