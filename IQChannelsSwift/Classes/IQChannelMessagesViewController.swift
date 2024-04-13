@@ -2,7 +2,6 @@ import UIKit
 import MessageKit
 import SDWebImage
 import InputBarAccessoryView
-import SwiftMessages
 
 open class IQChannelMessagesViewController: MessagesViewController, UIGestureRecognizerDelegate {
     
