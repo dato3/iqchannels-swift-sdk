@@ -20,7 +20,7 @@ PODS:
   - TRVSEventSource (0.0.8)
 
 DEPENDENCIES:
-  - IQChannelsSwift (from `/Users/dato3/Desktop/Git/iqchannels-swift`)
+  - IQChannelsSwift (from `/Users/dato3/Desktop/Git/iqchannels-swift-sdk`)
 
 SPEC REPOS:
   trunk:
@@ -33,7 +33,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   IQChannelsSwift:
-    :path: "/Users/dato3/Desktop/Git/iqchannels-swift"
+    :path: "/Users/dato3/Desktop/Git/iqchannels-swift-sdk"
 
 SPEC CHECKSUMS:
   InputBarAccessoryView: 8e7fc09e9cba75e0fee5da13450e15c194806f69
@@ -44,6 +44,6 @@ SPEC CHECKSUMS:
   SwiftMessages: 1a23aef303fa7bb26ad802880746cf8358e378fe
   TRVSEventSource: 19fb940e0351ceb97125d46fd40cd55e339568d8
 
-PODFILE CHECKSUM: 0dc9173738edb9bc7911c2d0d9112e72b00196f1
+PODFILE CHECKSUM: fdc57eb59e20929faf9cf7cce61bb5dc05ffd822
 
 COCOAPODS: 1.15.2
