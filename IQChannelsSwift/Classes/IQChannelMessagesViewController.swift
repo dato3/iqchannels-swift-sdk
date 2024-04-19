@@ -476,13 +476,15 @@ extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UIN
     }
     
     public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        guard let url = urls.first,
-            url.startAccessingSecurityScopedResource() else { return }
-        defer { url.stopAccessingSecurityScopedResource() }
-        guard let data = try? Data(contentsOf: url) else { return }
-        
-        DispatchQueue.main.async {
-            self.confirmDataSubmission(data: data, filename: url.lastPathComponent)
+        urls.forEach { url in
+            guard url.startAccessingSecurityScopedResource() else { return }
+            defer { url.stopAccessingSecurityScopedResource() }
+            guard let data = try? Data(contentsOf: url) else { return }
+            
+            DispatchQueue.main.async {
+//                self.confirmDataSubmission(data: data, filename: url.lastPathComponent)]
+                self.sendData(data: data, filename: url.lastPathComponent)
+            }
         }
     }
     
@@ -890,6 +892,7 @@ private extension IQChannelMessagesViewController {
     func fileSourceDidTap(){
         let documentController = UIDocumentPickerViewController(forOpeningContentTypes: [.data])
         documentController.delegate = self
+        documentController.allowsMultipleSelection = true
         documentController.modalPresentationStyle = .formSheet
         present(documentController, animated: true)
     }
