@@ -869,14 +869,16 @@ private extension IQChannels {
             
             log?.info("Authenticating as customer, channel=\(channel ?? ""), attempt=\(authAttempt)")
         }
-        
-        setState(.authenticating)
+        if authAttempt == 1 {
+            setState(.authenticating)
+        }
     }
     
     private func authError(_ error: Error?) {
         guard authing != nil else { return }
         authing = nil
         
+        setState(.loggedOut)
         guard network?.isReachable() ?? false else {
             log?.info("Authentication failed, network is unreachable, error=\(error?.localizedDescription ?? "")")
             return
