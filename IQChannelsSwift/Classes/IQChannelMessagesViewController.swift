@@ -24,6 +24,7 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
     private var typingUser: IQUser?
     private var messagesSub: IQSubscription?
     private var moreMessagesLoading: IQSubscription?    
+    private var slideCellManager = IQSlideCellManager()
     private var messagesLoaded: Bool = false
         
     // MARK: - LIFECYCLE
@@ -131,12 +132,14 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
                 cell.configure(with: message, at: indexPath, and: messagesCollectionView)
                 cell.stackedSingleChoicesDelegate = self
                 cell.delegate = self
+                slideCellManager.add(cell)
                 return cell
             } else if message.payload == .card || message.payload == .carousel {
                 let cell = messagesCollectionView.dequeueReusableCell(IQCardCell.self, for: indexPath)
                 cell.configure(with: message, at: indexPath, and: messagesCollectionView)
                 cell.cardCellDelegate = self
                 cell.delegate = self
+                slideCellManager.add(cell)
                 return cell
             }
             
@@ -144,6 +147,7 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
                 let cell = messagesCollectionView.dequeueReusableCell(IQFilePreviewCell.self, for: indexPath)
                 cell.configure(with: message, at: indexPath, and: messagesCollectionView)
                 cell.delegate = self
+                slideCellManager.add(cell)
                 return cell
             }
             
@@ -156,6 +160,7 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
                 cell.configure(with: message, at: indexPath, and: messagesCollectionView)
                 cell.delegate = self
                 cell.ratingDelegate = self
+                slideCellManager.add(cell)
                 return cell
             }
             if message.payload == .singleChoice,
@@ -166,12 +171,14 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
                 cell.configure(with: message, at: indexPath, and: messagesCollectionView)
                 cell.singleChoiceDelegate = self
                 cell.delegate = self
+                slideCellManager.add(cell)
                 return cell
             }
         }
         let cell = super.collectionView(collectionView, cellForItemAt: indexPath)
         if let cell = cell as? MessageContentCell {
             cell.delegate = self
+            slideCellManager.add(cell)
         }
         return cell
     }
