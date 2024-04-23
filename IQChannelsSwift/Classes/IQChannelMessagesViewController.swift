@@ -543,8 +543,12 @@ extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UIN
     public func confirmDataSubmission(_ files: [(data: Data, filename: String)]) {
         let alertController = UIAlertController(title: "Подтвердите отправку файлов(\(files.count))", message: nil, preferredStyle: .actionSheet)
         alertController.addAction(.init(title: "Отправить", style: .default, handler: { _ in
+            files.enumerated().forEach { index, turtle in
+                DispatchQueue.main.asyncAfter(deadline: .now() + (Double(index) * 0.5)) {
+                    self.sendData(data: turtle.data, filename: turtle.filename)
+                }
+            }
             files.forEach { data, filename in
-                self.sendData(data: data, filename: filename)
             }
         }))
         alertController.addAction(.init(title: "Отмена", style: .cancel))
@@ -909,6 +913,16 @@ private extension IQChannelMessagesViewController {
         chatUnavailableView.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.horizontalEdges.equalToSuperview().inset(16)
+        }
+        
+        chatUnavailableView.onBackTapped = { [weak self] in
+            guard let self else { return }
+            
+            if navigationController?.viewControllers.first === self {
+                dismiss(animated: true)
+            } else {
+                navigationController?.popViewController(animated: true)
+            }
         }
     }
     
