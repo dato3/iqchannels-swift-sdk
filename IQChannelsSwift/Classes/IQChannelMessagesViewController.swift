@@ -470,7 +470,7 @@ extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UIN
               item.loadFileRepresentation(forTypeIdentifier: UTType.image.identifier) { url, _ in
                   if let url, url.pathExtension == "gif",
                      let data = try? Data(contentsOf: url){
-                      self.sendData(data: data, filename: nil)
+                      self.sendData(data: data, filename: "gif")
                   } else {
                       if item.canLoadObject(ofClass: UIImage.self) {
                           item.loadObject(ofClass: UIImage.self) { (image, error) in
@@ -493,7 +493,7 @@ extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UIN
         if let url = info[UIImagePickerControllerImageURL] as? URL,
            url.pathExtension == "gif",
            let data = try? Data(contentsOf: url){
-            sendData(data: data, filename: nil)
+            sendData(data: data, filename: "gif")
             return
         }
         
@@ -501,6 +501,7 @@ extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UIN
     }
     
     public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        controller.dismiss(animated: true)
         if urls.count > 10 {
             DispatchQueue.main.async {
                 self.showLimitReachedAlert()

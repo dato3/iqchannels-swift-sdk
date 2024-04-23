@@ -324,6 +324,7 @@
 		A5A706133D2B0409B78A5A2991977B71 /* Bundle+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757DFA293A0A7D240F27FE0083FBBB67 /* Bundle+.swift */; };
 		A6454CB2F29427490D6F8AA992BB6CE0 /* UIImage+Metadata.h in Headers */ = {isa = PBXBuildFile; fileRef = 27C3074D2C7675CBA4EFF7FCF1CB517C /* UIImage+Metadata.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A71ACF4B4E62C2C3F58441DC73238421 /* NSBezierPath+SDRoundedCorners.m in Sources */ = {isa = PBXBuildFile; fileRef = 02826A7578DFCA117B8C9432C2F845B0 /* NSBezierPath+SDRoundedCorners.m */; };
+		A7C56E042BD79E7800D29843 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C56E032BD79E7800D29843 /* UIView+.swift */; };
 		A855C19A51797BED30F0D3B0311ACCF7 /* IQHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E6AA819613F086CCCEE97A575197AB /* IQHttpClient.swift */; };
 		A93FFB7BEA506BD5E837BFA6AE34B395 /* IQRatingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08EE646A50E4F832872988F3085D4FCB /* IQRatingState.swift */; };
 		A973FE6F15044E9768191F147A2554E6 /* SDImageCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BF9BDEF9BA437AF21314E221CE2A5D9 /* SDImageCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -829,7 +830,7 @@
 		57F1734CC80E2507E83BC2184B5CC412 /* SwiftMessages.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftMessages.release.xcconfig; sourceTree = "<group>"; };
 		59B26A2AA83CF59F9BF6159D53D640B6 /* Pods-IQChannelsSwift_Tests */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-IQChannelsSwift_Tests"; path = Pods_IQChannelsSwift_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A5ACC342E5A032D6F665D7547E6835F /* SDImageFrame.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageFrame.m; path = SDWebImage/Core/SDImageFrame.m; sourceTree = "<group>"; };
-		5A6CD2CBCC20C21D2FF2923197EFD039 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = WebImage/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		5A6CD2CBCC20C21D2FF2923197EFD039 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = WebImage/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		5AD12C40C2CC7EDB8008FE9AFBD169CD /* IQChannelsState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IQChannelsState.swift; path = IQChannelsSwift/Models/IQChannelsState.swift; sourceTree = "<group>"; };
 		5AF62103851F96985280950C12B86596 /* IQChannelsUnreadListenerProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IQChannelsUnreadListenerProtocol.swift; path = IQChannelsSwift/Protocols/IQChannelsUnreadListenerProtocol.swift; sourceTree = "<group>"; };
 		5B6B27D0247AC5CBFFE5B9096B976C2A /* SDImageHEICCoder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDImageHEICCoder.h; path = SDWebImage/Core/SDImageHEICCoder.h; sourceTree = "<group>"; };
@@ -848,7 +849,7 @@
 		61134D99F345B9ECD173FC9A30F886E2 /* errorIcon@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "errorIcon@3x.png"; path = "SwiftMessages/Resources/errorIcon@3x.png"; sourceTree = "<group>"; };
 		618EF8861199A310211B93BAA02C6586 /* MessageContentCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MessageContentCell.swift; path = Sources/Views/Cells/MessageContentCell.swift; sourceTree = "<group>"; };
 		61D23ECCF111E43CA3EA6FA58B9B7182 /* SDAnimatedImage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDAnimatedImage.m; path = SDWebImage/Core/SDAnimatedImage.m; sourceTree = "<group>"; };
-		62CC1793D0EB1E4C9E5653FA0A181C5F /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		62CC1793D0EB1E4C9E5653FA0A181C5F /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		62E18CCCB38C4C6F468308254F3846F4 /* SDWebImageDownloader.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageDownloader.m; path = SDWebImage/Core/SDWebImageDownloader.m; sourceTree = "<group>"; };
 		6341029A44139DF55F1BE8433EB84E9C /* IQClientAuth.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IQClientAuth.swift; path = IQChannelsSwift/Models/IQClientAuth.swift; sourceTree = "<group>"; };
 		649313FD54E734F400C549611270A033 /* SDImageLoadersManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDImageLoadersManager.h; path = SDWebImage/Core/SDImageLoadersManager.h; sourceTree = "<group>"; };
@@ -968,7 +969,7 @@
 		9A833F616D52D8B0EDA85EBC30E3C605 /* IQClientAuthRequest.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IQClientAuthRequest.swift; path = IQChannelsSwift/Models/IQClientAuthRequest.swift; sourceTree = "<group>"; };
 		9C370C54EBF84A9168CE524773F9CAC6 /* SDImageIOCoder.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageIOCoder.m; path = SDWebImage/Core/SDImageIOCoder.m; sourceTree = "<group>"; };
 		9C8EEC94EC51397F54C8149537E9B290 /* SDImageCachesManagerOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageCachesManagerOperation.m; path = SDWebImage/Private/SDImageCachesManagerOperation.m; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9E3F73170EA6AA1852B30CB80908F7E3 /* SDImageIOAnimatedCoderInternal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDImageIOAnimatedCoderInternal.h; path = SDWebImage/Private/SDImageIOAnimatedCoderInternal.h; sourceTree = "<group>"; };
 		9F536E630F2CA6DE46E8358ECEC46CA1 /* successIconSubtle@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "successIconSubtle@3x.png"; path = "SwiftMessages/Resources/successIconSubtle@3x.png"; sourceTree = "<group>"; };
 		9FF972385DB531E502B93A54F92739D5 /* successIcon@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "successIcon@2x.png"; path = "SwiftMessages/Resources/successIcon@2x.png"; sourceTree = "<group>"; };
@@ -988,10 +989,11 @@
 		A60888D915CAD77898CBAAD6E967F31F /* HorizontalEdgePadding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HorizontalEdgePadding.swift; path = Sources/Models/HorizontalEdgePadding.swift; sourceTree = "<group>"; };
 		A7037B2F6D641315BFA192656799149C /* IQClientSession.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IQClientSession.swift; path = IQChannelsSwift/Models/IQClientSession.swift; sourceTree = "<group>"; };
 		A7B6FE761725AD6E7FFB18329FD6F51F /* TRVSEventSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = TRVSEventSource.h; path = TRVSEventSource/TRVSEventSource.h; sourceTree = "<group>"; };
+		A7C56E032BD79E7800D29843 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIView+.swift"; path = "IQChannelsSwift/Extensions/UIView+.swift"; sourceTree = "<group>"; };
 		A9268AEBA5129C8566361594AFCE31D2 /* TRVSServerSentEvent.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = TRVSServerSentEvent.h; path = TRVSEventSource/TRVSServerSentEvent.h; sourceTree = "<group>"; };
 		A9528790BF16CD53005CF3DE58F8201D /* NSBezierPath+SDRoundedCorners.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSBezierPath+SDRoundedCorners.h"; path = "SDWebImage/Private/NSBezierPath+SDRoundedCorners.h"; sourceTree = "<group>"; };
 		A9999D54E0BDAF7BE1A8BC484AC596E5 /* InputItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InputItem.swift; path = Sources/Protocols/InputItem.swift; sourceTree = "<group>"; };
-		A9BC27A78A10C99E5BBC35F91F138A94 /* Images */ = {isa = PBXFileReference; includeInIndex = 1; name = Images; path = Assets/MessageKitAssets.bundle/Images; sourceTree = "<group>"; };
+		A9BC27A78A10C99E5BBC35F91F138A94 /* Images */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; name = Images; path = Assets/MessageKitAssets.bundle/Images; sourceTree = "<group>"; };
 		A9FD6EF120F71D19C469CDF4DBE40050 /* SDImageGIFCoder.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageGIFCoder.m; path = SDWebImage/Core/SDImageGIFCoder.m; sourceTree = "<group>"; };
 		AA005348BF738D870F4036C7C2A09606 /* MessageCellDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MessageCellDelegate.swift; path = Sources/Protocols/MessageCellDelegate.swift; sourceTree = "<group>"; };
 		AA3B9D350A480B0316DAB08CE86F08B9 /* MarginAdjustable+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "MarginAdjustable+Extensions.swift"; path = "SwiftMessages/MarginAdjustable+Extensions.swift"; sourceTree = "<group>"; };
@@ -1114,7 +1116,7 @@
 		E5083E07CE775352CD86B47772500368 /* IQJSON.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IQJSON.swift; path = IQChannelsSwift/Models/IQJSON.swift; sourceTree = "<group>"; };
 		E55ED329EF3A62C9237406866B6976CD /* warningIconLight@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = "warningIconLight@2x.png"; path = "SwiftMessages/Resources/warningIconLight@2x.png"; sourceTree = "<group>"; };
 		E7594D7BFB05D34EB8CA6E505B9890BD /* TRVSEventSource-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "TRVSEventSource-Info.plist"; sourceTree = "<group>"; };
-		E7A4CAACB116CF622760ADDACDF35035 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		E7A4CAACB116CF622760ADDACDF35035 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		E8D214AD34001C8C5B7FE4074B79847C /* InputBarViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InputBarViewController.swift; path = Sources/ViewControllers/InputBarViewController.swift; sourceTree = "<group>"; };
 		E8E20CB0CD5F9C87F16B398A9D4ACD67 /* UIImage+ExtendedCacheData.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+ExtendedCacheData.h"; path = "SDWebImage/Core/UIImage+ExtendedCacheData.h"; sourceTree = "<group>"; };
 		E8FB4971E781BBE8AD684B38F81FECC4 /* SDWebImage-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SDWebImage-dummy.m"; sourceTree = "<group>"; };
@@ -1138,7 +1140,7 @@
 		EF1F899E7F659A62557120A71CE73F44 /* TRVSEventSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = TRVSEventSource.m; path = TRVSEventSource/TRVSEventSource.m; sourceTree = "<group>"; };
 		F18B7083D90AA45C2FA4AEECEC460D50 /* InputBarAccessoryView+Availability.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "InputBarAccessoryView+Availability.swift"; path = "Sources/Supporting Files/InputBarAccessoryView+Availability.swift"; sourceTree = "<group>"; };
 		F1FA4AAC1C57AC03AAC67EC80763E550 /* SDAsyncBlockOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDAsyncBlockOperation.h; path = SDWebImage/Private/SDAsyncBlockOperation.h; sourceTree = "<group>"; };
-		F22C758D064F5A190B134B01602E9481 /* IQChannelsSwift.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = IQChannelsSwift.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		F22C758D064F5A190B134B01602E9481 /* IQChannelsSwift.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = IQChannelsSwift.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		F26C4E7C6C7B33F70825586844CF2C40 /* AttachmentManagerDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AttachmentManagerDelegate.swift; path = Sources/Plugins/AttachmentManager/Protocols/AttachmentManagerDelegate.swift; sourceTree = "<group>"; };
 		F2CE4B89EB164A2C085E52E4F9766CE7 /* ConstraintViewDSL.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintViewDSL.swift; path = Sources/ConstraintViewDSL.swift; sourceTree = "<group>"; };
 		F347C21F3CBB9E339F6B19148AD0FCCD /* ConstraintRelatableTarget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ConstraintRelatableTarget.swift; path = Sources/ConstraintRelatableTarget.swift; sourceTree = "<group>"; };
@@ -1286,7 +1288,6 @@
 				F6399EDDBBB3970A39286A89655DBB92 /* Core */,
 				E61BBFC9F53266E483A6CA6AAC54A7E4 /* Support Files */,
 			);
-			name = InputBarAccessoryView;
 			path = InputBarAccessoryView;
 			sourceTree = "<group>";
 		};
@@ -1468,7 +1469,6 @@
 				61F41054D12314841BFDDF53B0640BA4 /* Resources */,
 				7929FF0AEE952AAB57D98EC9A95FC5E5 /* Support Files */,
 			);
-			name = MessageKit;
 			path = MessageKit;
 			sourceTree = "<group>";
 		};
@@ -1514,7 +1514,6 @@
 				7616DAF83FC9248831023B81F8D03844 /* UILayoutSupport+Extensions.swift */,
 				81798574C0AE38B1AF1C96DF35031A0F /* Support Files */,
 			);
-			name = SnapKit;
 			path = SnapKit;
 			sourceTree = "<group>";
 		};
@@ -1558,7 +1557,6 @@
 				30672A3A4FCE3843460C4C5FEBA89EAF /* TRVSServerSentEvent.m */,
 				8F85ED90F19F0B4328FAD3A0C5F1F699 /* Support Files */,
 			);
-			name = TRVSEventSource;
 			path = TRVSEventSource;
 			sourceTree = "<group>";
 		};
@@ -1591,6 +1589,7 @@
 				991983722A795AB1F92137FC64546543 /* UICollectionView+.swift */,
 				ED68529AC51C0758C52911D5AA01E544 /* UIColor+.swift */,
 				AD5C3421E6BB0298EA7F0EFAD56CCA1D /* UIViewController+.swift */,
+				A7C56E032BD79E7800D29843 /* UIView+.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -1633,7 +1632,6 @@
 				11C7F56573A7BDD4D91185089F328CD2 /* Resources */,
 				C4056E601114E36A2CFB6D85F94B794F /* Support Files */,
 			);
-			name = SDWebImage;
 			path = SDWebImage;
 			sourceTree = "<group>";
 		};
@@ -1767,7 +1765,6 @@
 				AC1DEAE6CF5CB28198D05C4F767094ED /* App */,
 				179EF5D13842084CD603C4DB8FB2E03D /* Support Files */,
 			);
-			name = SwiftMessages;
 			path = SwiftMessages;
 			sourceTree = "<group>";
 		};
@@ -3021,6 +3018,7 @@
 				AA06437F7ED5F0F2C49C556E5198115C /* IQChannelsSwift-dummy.m in Sources */,
 				B9FC02FBB7B8FD8766C65ADFFAF39122 /* IQChannelsUnreadListenerProtocol.swift in Sources */,
 				925B8A207EC334EEEBC28676D3122BB7 /* IQChat.swift in Sources */,
+				A7C56E042BD79E7800D29843 /* UIView+.swift in Sources */,
 				1E8392BBCD5C1281E13A43CBF4F4F1D6 /* IQChatEvent.swift in Sources */,
 				1051ED09129383972E992DFE130ED7C4 /* IQChatEventQuery.swift in Sources */,
 				D92E5D929DB4BD15E79049C40B38BFEB /* IQChatEventType.swift in Sources */,
@@ -3691,8 +3689,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};
