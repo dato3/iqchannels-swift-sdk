@@ -466,24 +466,42 @@ extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UIN
         picker.dismiss(animated: true)
         
         let itemProviders = results.map(\.itemProvider)
-          for item in itemProviders {
-              item.loadFileRepresentation(forTypeIdentifier: UTType.image.identifier) { url, _ in
-                  if let url, url.pathExtension == "gif",
-                     let data = try? Data(contentsOf: url){
-                      self.sendData(data: data, filename: "gif")
-                  } else {
-                      if item.canLoadObject(ofClass: UIImage.self) {
-                          item.loadObject(ofClass: UIImage.self) { (image, error) in
-                              DispatchQueue.main.async {
-                                  if let image = image as? UIImage {
-                                      self.sendImage(image)
-                                  }
-                              }
-                          }
-                      }
-                  }
-              }
-          }
+        for (index, item) in itemProviders.enumerated() {
+            if item.hasItemConformingToTypeIdentifier(UTType.gif.identifier) {
+                item.loadDataRepresentation(forTypeIdentifier: UTType.gif.identifier) { data, _ in
+                    guard let data else { return }
+                    DispatchQueue.main.async {
+                        self.sendData(data: data, filename: "gif")
+                    }
+                }
+            } else {
+                item.loadImage { image, error in
+                    if let image {
+                        print("sending ----+, ", index)
+                        DispatchQueue.main.async {
+                            self.sendImage(image, filename: nil)
+                        }
+                    }
+                }
+            }
+//            item.loadDataRepresentation(forTypeIdentifier: item.registeredTypeIdentifiers.first ?? "public.image") { data, _ in
+//                print("sending ----, ", index, data?.count)
+//                guard let data else { return }
+//                
+//                if item.hasItemConformingToTypeIdentifier(UTType.gif.identifier) {
+//                    DispatchQueue.main.async {
+//                        self.sendData(data: data, filename: "gif")
+//                    }
+//                } else if let image = UIImage(data: data) {
+//                    print("sending ----+, ", index)
+//                    DispatchQueue.main.async {
+//                        self.sendImage(image, filename: nil)
+//                    }
+//                } else {
+//                    print("sending ---- nilll")
+//                }
+//            }
+        }
     }
     
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
@@ -497,7 +515,7 @@ extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UIN
             return
         }
         
-        sendImage(image)
+        sendImage(image, filename: nil)
     }
     
     public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
@@ -545,8 +563,8 @@ extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UIN
         IQChannels.sendData(data, filename: filename)
     }
     
-    public func sendImage(_ image: UIImage) {
-        IQChannels.sendImage(image, filename: nil)
+    public func sendImage(_ image: UIImage, filename: String?) {
+        IQChannels.sendImage(image, filename: filename)
     }
 }
 
@@ -929,6 +947,7 @@ private extension IQChannelMessagesViewController {
         case .photoLibrary, .savedPhotosAlbum:
             var configuration = PHPickerConfiguration(photoLibrary: .shared())
             configuration.selectionLimit = 10
+            configuration.preferredAssetRepresentationMode = .current
             let picker = PHPickerViewController(configuration: configuration)
             picker.delegate = self
             present(picker, animated: true)
