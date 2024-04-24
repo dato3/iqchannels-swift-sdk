@@ -132,7 +132,6 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
                 cell.configure(with: message, at: indexPath, and: messagesCollectionView)
                 cell.stackedSingleChoicesDelegate = self
                 cell.delegate = self
-                slideCellManager.add(cell)
                 return cell
             } else if message.payload == .card || message.payload == .carousel {
                 let cell = messagesCollectionView.dequeueReusableCell(IQCardCell.self, for: indexPath)
@@ -171,7 +170,6 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
                 cell.configure(with: message, at: indexPath, and: messagesCollectionView)
                 cell.singleChoiceDelegate = self
                 cell.delegate = self
-                slideCellManager.add(cell)
                 return cell
             }
         }
@@ -341,6 +339,20 @@ extension IQChannelMessagesViewController: MessagesDataSource, MessageCellDelega
             present(alert, animated: true)
         }
     }
+}
+
+//MARK: - IQSLIDECELLMANAGERDELEGATE
+extension IQChannelMessagesViewController: IQSlideCellManagerDelegate {
+ 
+    func slideManager(_ manager: IQSlideCellManager, slideDidOccurAt cell: MessageContentCell) {
+        guard let indexPath = messagesCollectionView.indexPath(for: cell),
+              messages.indices.contains(indexPath.row) else { return }
+        
+        let message = messages[indexPath.row]
+        
+        print("REPLYING: ", message.text)
+    }
+   
 }
 
 // MARK: - MESSAGES LAYOUT DELEGATE
@@ -863,6 +875,8 @@ private extension IQChannelMessagesViewController {
         let gr = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         gr.delegate = self
         messagesCollectionView.addGestureRecognizer(gr)
+        
+        slideCellManager.delegate = self
     }
     
     func setupInputBar(){
