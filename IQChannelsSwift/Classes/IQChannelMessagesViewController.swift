@@ -11,6 +11,7 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
     private var loginIndicator = IQActivityIndicator()
     private var scrollDownButton = IQScrollDownButton()
     private var chatUnavailableView = IQChatUnavailableView()
+    private var pendingReplyView = IQPendingReplyView()
     private var refreshControl = UIRefreshControl()
     
     // MARK: - PROPERTIES
@@ -39,6 +40,7 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
         setupNavBar()
         setupChatUnavailableView()
         setupScrollDownButton()
+        setupPendingReplyView()
         setupCollectionView()
         setupInputBar()
         setupObservers()
@@ -208,7 +210,12 @@ extension IQChannelMessagesViewController {
                 UIPasteboard.general.string = textToCopy
                 self?.showCopyPreviewView()
             }
-            return UIMenu(title: "", image: nil, identifier: nil, options: UIMenu.Options.displayInline, children: [copy])
+            let reply = UIAction(title: "Ответить", image: UIImage(systemName: "arrowshape.turn.up.left"), identifier: nil, discoverabilityTitle: nil, state: .off) { [weak self] (_) in
+                if let message = message as? IQChatMessage {
+                    self?.reply(to: message)
+                }
+            }
+            return UIMenu(title: "", image: nil, identifier: nil, options: UIMenu.Options.displayInline, children: [copy, reply])
         }
         return context
     }
@@ -236,6 +243,9 @@ extension IQChannelMessagesViewController: InputBarAccessoryViewDelegate {
         
         let height = self.view.frame.height - rect.origin.y
         UIView.animate(withDuration: 0.2) {
+            self.pendingReplyView.snp.updateConstraints { make in
+                make.bottom.equalToSuperview().inset(height).priority(.high)
+            }
             self.scrollDownButton.snp.updateConstraints { make in
                 make.bottom.equalToSuperview().inset(height + 16).priority(.high)
             }
@@ -249,6 +259,7 @@ extension IQChannelMessagesViewController: InputBarAccessoryViewDelegate {
         }
         inputBar.inputTextView.text = nil
         IQChannels.sendText(text)
+        reply(to: nil)
     }
     
     public func inputBar(_ inputBar: InputBarAccessoryView, textViewTextDidChangeTo text: String) {
@@ -350,7 +361,7 @@ extension IQChannelMessagesViewController: IQSlideCellManagerDelegate {
         
         let message = messages[indexPath.row]
         
-        print("REPLYING: ", message.text)
+        reply(to: message)
     }
    
 }
@@ -503,23 +514,6 @@ extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UIN
                     }
                 }
             }
-//            item.loadDataRepresentation(forTypeIdentifier: item.registeredTypeIdentifiers.first ?? "public.image") { data, _ in
-//                print("sending ----, ", index, data?.count)
-//                guard let data else { return }
-//                
-//                if item.hasItemConformingToTypeIdentifier(UTType.gif.identifier) {
-//                    DispatchQueue.main.async {
-//                        self.sendData(data: data, filename: "gif")
-//                    }
-//                } else if let image = UIImage(data: data) {
-//                    print("sending ----+, ", index)
-//                    DispatchQueue.main.async {
-//                        self.sendImage(image, filename: nil)
-//                    }
-//                } else {
-//                    print("sending ---- nilll")
-//                }
-//            }
         }
     }
     
@@ -685,6 +679,16 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListenerProtocol, I
 
         moreMessagesLoading = IQChannels.moreMessages(self)
         refreshControl.beginRefreshing()
+    }
+    
+    func reply(to message: IQChatMessage?) {
+        if let message {
+            pendingReplyView.configure(message)
+        }
+        pendingReplyView.isHidden = message == nil
+        additionalBottomInset = message == nil ? 0 : (56 + 16)
+        messageInputBar.inputTextView.becomeFirstResponder()
+        scrollToBottomIfNeeded()
     }
     
     func iqMoreMessagesLoaded() {
@@ -904,6 +908,19 @@ private extension IQChannelMessagesViewController {
         messageInputBar.setStackViewItems([button], forStack: .left, animated: false)
         messageInputBar.setRightStackViewWidthConstant(to: .zero, animated: false)
         messageInputBar.setLeftStackViewWidthConstant(to: 40, animated: false)
+    }
+    
+    func setupPendingReplyView(){
+        view.addSubview(pendingReplyView)
+        pendingReplyView.snp.makeConstraints { make in
+            make.height.equalTo(56)
+            make.horizontalEdges.equalToSuperview()
+            make.bottom.equalToSuperview().inset(0).priority(.high)
+        }
+        pendingReplyView.onCloseDidTap = { [unowned self] in
+            reply(to: nil)
+        }
+        reply(to: nil)
     }
     
     func setupScrollDownButton(){

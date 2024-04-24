@@ -222,7 +222,7 @@ class IQChatMessage: MessageType {
         }
     }
     
-    private func chatMessageSenderDisplayName() -> String {
+    func chatMessageSenderDisplayName() -> String {
         switch author {
         case .client:
             if let client = client {

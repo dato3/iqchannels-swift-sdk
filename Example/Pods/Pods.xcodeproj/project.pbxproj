@@ -327,6 +327,7 @@
 		A7C56E002BD57A1600D29843 /* IQSlideCellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C56DFF2BD57A1600D29843 /* IQSlideCellManager.swift */; };
 		A7C56E042BD79E7800D29843 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C56E032BD79E7800D29843 /* UIView+.swift */; };
 		A7C56E062BD7E82400D29843 /* Data+.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C56E052BD7E82400D29843 /* Data+.swift */; };
+		A7C56F082BD97E3800D29843 /* IQPendingReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C56F072BD97E3800D29843 /* IQPendingReplyView.swift */; };
 		A855C19A51797BED30F0D3B0311ACCF7 /* IQHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E6AA819613F086CCCEE97A575197AB /* IQHttpClient.swift */; };
 		A93FFB7BEA506BD5E837BFA6AE34B395 /* IQRatingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08EE646A50E4F832872988F3085D4FCB /* IQRatingState.swift */; };
 		A973FE6F15044E9768191F147A2554E6 /* SDImageCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BF9BDEF9BA437AF21314E221CE2A5D9 /* SDImageCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -991,9 +992,10 @@
 		A60888D915CAD77898CBAAD6E967F31F /* HorizontalEdgePadding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HorizontalEdgePadding.swift; path = Sources/Models/HorizontalEdgePadding.swift; sourceTree = "<group>"; };
 		A7037B2F6D641315BFA192656799149C /* IQClientSession.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IQClientSession.swift; path = IQChannelsSwift/Models/IQClientSession.swift; sourceTree = "<group>"; };
 		A7B6FE761725AD6E7FFB18329FD6F51F /* TRVSEventSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = TRVSEventSource.h; path = TRVSEventSource/TRVSEventSource.h; sourceTree = "<group>"; };
-		A7C56DFF2BD57A1600D29843 /* IQSlideCellManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQSlideCellManager.swift; sourceTree = "<group>"; };
+		A7C56DFF2BD57A1600D29843 /* IQSlideCellManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IQSlideCellManager.swift; path = IQChannelsSwift/Additional/IQSlideCellManager.swift; sourceTree = "<group>"; };
 		A7C56E032BD79E7800D29843 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIView+.swift"; path = "IQChannelsSwift/Extensions/UIView+.swift"; sourceTree = "<group>"; };
 		A7C56E052BD7E82400D29843 /* Data+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Data+.swift"; path = "IQChannelsSwift/Extensions/Data+.swift"; sourceTree = "<group>"; };
+		A7C56F072BD97E3800D29843 /* IQPendingReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IQPendingReplyView.swift; path = IQChannelsSwift/Views/IQPendingReplyView.swift; sourceTree = "<group>"; };
 		A9268AEBA5129C8566361594AFCE31D2 /* TRVSServerSentEvent.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = TRVSServerSentEvent.h; path = TRVSEventSource/TRVSServerSentEvent.h; sourceTree = "<group>"; };
 		A9528790BF16CD53005CF3DE58F8201D /* NSBezierPath+SDRoundedCorners.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSBezierPath+SDRoundedCorners.h"; path = "SDWebImage/Private/NSBezierPath+SDRoundedCorners.h"; sourceTree = "<group>"; };
 		A9999D54E0BDAF7BE1A8BC484AC596E5 /* InputItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InputItem.swift; path = Sources/Protocols/InputItem.swift; sourceTree = "<group>"; };
@@ -1999,6 +2001,7 @@
 				0784A3ACB8526146F9A2261549349CEC /* IQAttachmentButton.swift */,
 				4A76A73B8966AC46B2CBDC4B26C2E429 /* IQChatUnavailableView.swift */,
 				D9C5395493AF3086ECC381A3DAE7E55B /* IQScrollDownButton.swift */,
+				A7C56F072BD97E3800D29843 /* IQPendingReplyView.swift */,
 				71EA3A9EE9F308ABECEFCDD0D6C6C9FF /* IQSingleChoicesView.swift */,
 				372B808BFCC8903F584233FDFB97C238 /* IQStarRatingView.swift */,
 				FD636511175D7F1182509440B58248F4 /* IQTimestampView.swift */,
@@ -3082,6 +3085,7 @@
 				A7C56E002BD57A1600D29843 /* IQSlideCellManager.swift in Sources */,
 				B79A9BCFED232586B0130563D56D5875 /* IQTypingIndicatorCell.swift in Sources */,
 				2983EB7DFBD79032DD1C4817577EAF5E /* IQTypingIndicatorCellSizeCalculator.swift in Sources */,
+				A7C56F082BD97E3800D29843 /* IQPendingReplyView.swift in Sources */,
 				723178E1496D594336AF8854C608E42A /* IQUser.swift in Sources */,
 				F655DFA17444367777D49FBBB554D6B6 /* MessageSender.swift in Sources */,
 				68A683B07BDB9769D4C6A0EC463015BF /* NSError+.swift in Sources */,
