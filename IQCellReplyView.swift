@@ -1,25 +1,17 @@
 //
-//  IQPendingReplyView.swift
+//  IQCellReplyView.swift
 //  IQChannelsSwift
 //
-//  Created by Muhammed Aralbek on 24.04.2024.
+//  Created by Muhammed Aralbek on 26.04.2024.
 //
 
 import UIKit
+import MessageKit
 
-class IQPendingReplyView: UIView {
-    
-    var onCloseDidTap: (() -> ())?
-    
-    private let border: UIView = {
-        let view = UIView()
-        view.backgroundColor = .init(hex: 0xE4E8ED)
-        return view
-    }()
-    
+class IQCellReplyView: UIView {
+            
     private let sideLine: UIView = {
         let view = UIView()
-        view.backgroundColor = .init(hex: 0xDD0A34)
         view.layer.cornerRadius = 1
         view.snp.makeConstraints { make in
             make.size.equalTo(CGSize(width: 2, height: 32))
@@ -56,20 +48,13 @@ class IQPendingReplyView: UIView {
     }()
     
     private lazy var stackView: UIStackView = {
-       let stackView = UIStackView(arrangedSubviews: [sideLine, imageView, labelsStackView, closeButton])
+       let stackView = UIStackView(arrangedSubviews: [sideLine, imageView, labelsStackView])
         stackView.spacing = 8
         stackView.axis = .horizontal
         stackView.alignment = .center
         stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.layoutMargins = .init(top: 0, left: 8, bottom: 0, right: 8)
+        stackView.layoutMargins = .init(top: 8, left: 12, bottom: 8, right: 12)
         return stackView
-    }()
-    
-    private lazy var closeButton: UIButton = {
-       let button = UIButton()
-        button.setImage(.init(named: "xmarkCircleFilled", in: .channelsAssetBundle(), with: nil), for: .normal)
-        button.addTarget(self, action: #selector(closeDidTap), for: .touchUpInside)
-        return button
     }()
     
     override init(frame: CGRect) {
@@ -83,13 +68,16 @@ class IQPendingReplyView: UIView {
         fatalError()
     }
     
-    func configure(_ message: IQChatMessage) {
-        messageLabel.text = message.text
-        authorLabel.text = message.chatMessageSenderDisplayName()
+    func configure(with message: any MessageType) {
+        guard let message = message as? IQChatMessage,
+              let replyMessage = message.replyToMessage else { return }
+
+        messageLabel.text = replyMessage.text
+        authorLabel.text = replyMessage.chatMessageSenderDisplayName()
         
-        if message.isMediaMessage,
-           let url = message.file?.url {
-            if let uploadImage = message.uploadImage {
+        if replyMessage.isMediaMessage,
+           let url = replyMessage.file?.url {
+            if let uploadImage = replyMessage.uploadImage {
                 imageView.image = uploadImage
             } else {
                 imageView.sd_setImage(with: url)
@@ -100,35 +88,28 @@ class IQPendingReplyView: UIView {
             imageView.image = nil
             imageView.isHidden = true
         }
-
-    }
-    
-    @objc private func closeDidTap(){
-        onCloseDidTap?()
+        if message.isMy {
+            sideLine.backgroundColor = .white
+            authorLabel.textColor = .white
+            messageLabel.textColor = .white.withAlphaComponent(0.64)
+        } else {
+            sideLine.backgroundColor = .init(hex: 0xDD0A34)
+            authorLabel.textColor = .init(hex: 0x242729)
+            messageLabel.textColor = .init(hex: 0x919399)
+        }
     }
     
     private func setupViews(){
-        backgroundColor = .white
-        addSubview(border)
+        backgroundColor = .clear
         addSubview(stackView)
     }
     
     private func setupConstraints(){
-        border.snp.makeConstraints { make in
-            make.horizontalEdges.top.equalToSuperview()
-            make.height.equalTo(1)
-        }
         stackView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        closeButton.snp.makeConstraints { make in
-            make.size.equalTo(24)
-        }
         imageView.snp.makeConstraints { make in
             make.size.equalTo(32)
-        }
-        labelsStackView.snp.makeConstraints { make in
-            make.width.equalTo(CGFloat.greatestFiniteMagnitude).priority(.high)
         }
     }
 

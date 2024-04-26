@@ -23,6 +23,8 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
     private var readMessages: Set<Int> = []
     private var typingTimer: Timer?
     private var typingUser: IQUser?
+    /// Set only via reply(to:) method
+    private var _messageToReply: IQChatMessage?
     private var messagesSub: IQSubscription?
     private var moreMessagesLoading: IQSubscription?    
     private var slideCellManager = IQSlideCellManager()
@@ -258,7 +260,7 @@ extension IQChannelMessagesViewController: InputBarAccessoryViewDelegate {
             return
         }
         inputBar.inputTextView.text = nil
-        IQChannels.sendText(text)
+        IQChannels.sendText(text, replyMessageID: _messageToReply?.id)
         reply(to: nil)
     }
     
@@ -311,6 +313,7 @@ extension IQChannelMessagesViewController: MessagesDataSource, MessageCellDelega
           for: indexPath)
         cell.configure(with: message, at: indexPath, and: messagesCollectionView)
         cell.delegate = self
+        cell.timestampCellDelegate = self
         return cell
     }
     
@@ -631,7 +634,16 @@ extension IQChannelMessagesViewController: IQChannelsStateListenerProtocol {
 }
 
 //MARK: - ChoiceDelegates
-extension IQChannelMessagesViewController: IQCardCellDelegate, IQStackedSingleChoicesCellDelegate, IQSingleChoicesViewDelegate, IQRatingCellDelegate {
+extension IQChannelMessagesViewController: IQCardCellDelegate, IQStackedSingleChoicesCellDelegate, IQSingleChoicesViewDelegate, IQRatingCellDelegate, IQTimestampMessageCellDelegate {
+    
+    func cell(_ cell: IQTimestampMessageCell, didTapReplyView: IQCellReplyView) {
+        guard let indexPath = messagesCollectionView.indexPath(for: cell),
+              messages.indices.contains(indexPath.row),
+              let replyId = messages[indexPath.row].replyToMessageID,
+              let row = messages.firstIndex(where: { $0.id == replyId }) else { return }
+        
+        messagesCollectionView.scrollToItem(at: .init(row: row, section: 0), at: .centeredVertically, animated: true)
+    }
     
     func cell(didTapSendButtonFrom cell: IQRatingCell, value: Int) {
         guard let indexPath = messagesCollectionView.indexPath(for: cell),
@@ -682,6 +694,7 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListenerProtocol, I
     }
     
     func reply(to message: IQChatMessage?) {
+        _messageToReply = message
         if let message {
             pendingReplyView.configure(message)
         }
@@ -727,6 +740,7 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListenerProtocol, I
         guard messagesSub != nil else { return }
         
         self.messages = messages
+        linkReplyMessages()
         readMessages = []
         messagesLoaded = true
         
@@ -750,6 +764,7 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListenerProtocol, I
 
     func iq(messageAdded message: IQChatMessage) {
         messages.append(message)
+        linkReplyMessages()
         scrollDownButton.dotHidden = false
         messagesCollectionView.reloadData()
         scrollToBottomIfNeeded(animated: false)
@@ -757,6 +772,7 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListenerProtocol, I
 
     func iq(messageSent message: IQChatMessage) {
         messages.append(message)
+        linkReplyMessages()
         messagesCollectionView.reloadData()
         scrollToBottomIfNeeded()
     }
@@ -767,6 +783,7 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListenerProtocol, I
         }
 
         messages[index] = message
+        linkReplyMessages()
         var paths = [IndexPath]()
         paths.append(IndexPath(item: index, section: 0))
         if index > 0 {
@@ -811,6 +828,14 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListenerProtocol, I
         
         DispatchQueue.main.async {
             self.scrollToBottomIfNeeded()
+        }
+    }
+    
+    private func linkReplyMessages(){
+        messages.filter { $0.replyToMessageID != nil }.forEach { message in
+            guard let replyID = message.replyToMessageID else { return }
+            
+            message.replyToMessage = messages.first(where: { $0.id == replyID })
         }
     }
 }

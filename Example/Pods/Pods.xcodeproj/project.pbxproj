@@ -328,6 +328,7 @@
 		A7C56E042BD79E7800D29843 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C56E032BD79E7800D29843 /* UIView+.swift */; };
 		A7C56E062BD7E82400D29843 /* Data+.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C56E052BD7E82400D29843 /* Data+.swift */; };
 		A7C56F082BD97E3800D29843 /* IQPendingReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C56F072BD97E3800D29843 /* IQPendingReplyView.swift */; };
+		A7C56F142BDB84EE00D29843 /* IQCellReplyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C56F132BDB84EE00D29843 /* IQCellReplyView.swift */; };
 		A855C19A51797BED30F0D3B0311ACCF7 /* IQHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E6AA819613F086CCCEE97A575197AB /* IQHttpClient.swift */; };
 		A93FFB7BEA506BD5E837BFA6AE34B395 /* IQRatingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08EE646A50E4F832872988F3085D4FCB /* IQRatingState.swift */; };
 		A973FE6F15044E9768191F147A2554E6 /* SDImageCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BF9BDEF9BA437AF21314E221CE2A5D9 /* SDImageCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -996,6 +997,7 @@
 		A7C56E032BD79E7800D29843 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UIView+.swift"; path = "IQChannelsSwift/Extensions/UIView+.swift"; sourceTree = "<group>"; };
 		A7C56E052BD7E82400D29843 /* Data+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Data+.swift"; path = "IQChannelsSwift/Extensions/Data+.swift"; sourceTree = "<group>"; };
 		A7C56F072BD97E3800D29843 /* IQPendingReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IQPendingReplyView.swift; path = IQChannelsSwift/Views/IQPendingReplyView.swift; sourceTree = "<group>"; };
+		A7C56F132BDB84EE00D29843 /* IQCellReplyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IQCellReplyView.swift; sourceTree = "<group>"; };
 		A9268AEBA5129C8566361594AFCE31D2 /* TRVSServerSentEvent.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = TRVSServerSentEvent.h; path = TRVSEventSource/TRVSServerSentEvent.h; sourceTree = "<group>"; };
 		A9528790BF16CD53005CF3DE58F8201D /* NSBezierPath+SDRoundedCorners.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSBezierPath+SDRoundedCorners.h"; path = "SDWebImage/Private/NSBezierPath+SDRoundedCorners.h"; sourceTree = "<group>"; };
 		A9999D54E0BDAF7BE1A8BC484AC596E5 /* InputItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InputItem.swift; path = Sources/Protocols/InputItem.swift; sourceTree = "<group>"; };
@@ -2006,6 +2008,7 @@
 				372B808BFCC8903F584233FDFB97C238 /* IQStarRatingView.swift */,
 				FD636511175D7F1182509440B58248F4 /* IQTimestampView.swift */,
 				D1907B09DB27B8F2AA57A70E7A2AF376 /* UIAlertView.swift */,
+				A7C56F132BDB84EE00D29843 /* IQCellReplyView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -3012,6 +3015,7 @@
 				BC0F67465A3810948EB48F01056ADB9E /* Error+.swift in Sources */,
 				FF6A4B78F2D076E6795637884F70C3E9 /* FilePreviewSizeCalculator.swift in Sources */,
 				D7719C5E22DF2B8918DA9C8F75825F46 /* IQAction.swift in Sources */,
+				A7C56F142BDB84EE00D29843 /* IQCellReplyView.swift in Sources */,
 				366685529506E783E08FB8C1CD6B8E4B /* IQActivityIndicator.swift in Sources */,
 				C9C702B02869882B892DF6B7BE8722BC /* IQActorType.swift in Sources */,
 				5AA0E3B7CDD9A36862DC023AACF00336 /* IQAttachmentButton.swift in Sources */,
