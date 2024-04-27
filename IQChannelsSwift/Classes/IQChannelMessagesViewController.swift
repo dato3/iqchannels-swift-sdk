@@ -303,6 +303,7 @@ extension IQChannelMessagesViewController: MessagesDataSource, MessageCellDelega
     public func photoCell(for message: any MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UICollectionViewCell? {
         let cell = messagesCollectionView.dequeueReusableCell(IQMediaMessageCell.self, for: indexPath)
         cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+        cell.replyViewDelegate = self
         cell.delegate = self
         return cell
     }
@@ -313,7 +314,7 @@ extension IQChannelMessagesViewController: MessagesDataSource, MessageCellDelega
           for: indexPath)
         cell.configure(with: message, at: indexPath, and: messagesCollectionView)
         cell.delegate = self
-        cell.timestampCellDelegate = self
+        cell.replyViewDelegate = self
         return cell
     }
     
@@ -510,9 +511,8 @@ extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UIN
             } else {
                 item.loadImage { image, error in
                     if let image {
-                        print("sending ----+, ", index)
                         DispatchQueue.main.async {
-                            self.sendImage(image, filename: nil)
+                            self.sendImage(image, filename: nil, replyMessageID: self._messageToReply?.id)
                         }
                     }
                 }
@@ -531,7 +531,7 @@ extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UIN
             return
         }
         
-        sendImage(image, filename: nil)
+        sendImage(image, filename: nil, replyMessageID: _messageToReply?.id)
     }
     
     public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
@@ -580,11 +580,13 @@ extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UIN
     }
     
     public func sendData(data: Data, filename: String?) {
+        reply(to: nil)
         IQChannels.sendData(data, filename: filename)
     }
     
-    public func sendImage(_ image: UIImage, filename: String?) {
-        IQChannels.sendImage(image, filename: filename)
+    public func sendImage(_ image: UIImage, filename: String?, replyMessageID: Int?) {
+        reply(to: nil)
+        IQChannels.sendImage(image, filename: filename, replyMessageID: replyMessageID)
     }
 }
 
@@ -634,9 +636,9 @@ extension IQChannelMessagesViewController: IQChannelsStateListenerProtocol {
 }
 
 //MARK: - ChoiceDelegates
-extension IQChannelMessagesViewController: IQCardCellDelegate, IQStackedSingleChoicesCellDelegate, IQSingleChoicesViewDelegate, IQRatingCellDelegate, IQTimestampMessageCellDelegate {
+extension IQChannelMessagesViewController: IQCardCellDelegate, IQStackedSingleChoicesCellDelegate, IQSingleChoicesViewDelegate, IQRatingCellDelegate, IQCellReplyViewDelegate {
     
-    func cell(_ cell: IQTimestampMessageCell, didTapReplyView: IQCellReplyView) {
+    func cell(_ cell: MessageContentCell, didTapReplyView: IQCellReplyView) {
         guard let indexPath = messagesCollectionView.indexPath(for: cell),
               messages.indices.contains(indexPath.row),
               let replyId = messages[indexPath.row].replyToMessageID,
@@ -897,6 +899,7 @@ private extension IQChannelMessagesViewController {
         messagesCollectionView.register(IQTimestampMessageCell.self, forCellWithReuseIdentifier: IQTimestampMessageCell.cellIdentifier)
         messagesCollectionView.register(IQMediaMessageCell.self, forCellWithReuseIdentifier: IQMediaMessageCell.cellIdentifier)
         messagesCollectionView.register(IQRatingCell.self, forCellWithReuseIdentifier: IQRatingCell.cellIdentifier)
+        messagesCollectionView.register(IQMediaMessageCell.self, forCellWithReuseIdentifier: IQMediaMessageCell.cellIdentifier)
         messagesCollectionView.register(IQTypingIndicatorCell.self, forCellWithReuseIdentifier: IQTypingIndicatorCell.cellIdentifier)
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self

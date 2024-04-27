@@ -9,13 +9,13 @@ import UIKit
 import SnapKit
 import MessageKit
 
-protocol IQTimestampMessageCellDelegate: AnyObject {
-    func cell(_ cell: IQTimestampMessageCell, didTapReplyView: IQCellReplyView)
+protocol IQCellReplyViewDelegate: AnyObject {
+    func cell(_ cell: MessageContentCell, didTapReplyView: IQCellReplyView)
 }
 
 class IQTimestampMessageCell: TextMessageCell {
     
-    weak var timestampCellDelegate: IQTimestampMessageCellDelegate?
+    weak var replyViewDelegate: IQCellReplyViewDelegate?
     
     var timestampView = IQTimestampView()
     
@@ -52,7 +52,7 @@ class IQTimestampMessageCell: TextMessageCell {
     }
     
     @objc private func replyViewDidTap(){
-        timestampCellDelegate?.cell(self, didTapReplyView: replyView)
+        replyViewDelegate?.cell(self, didTapReplyView: replyView)
     }
     
 }

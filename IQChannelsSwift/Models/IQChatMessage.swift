@@ -191,12 +191,13 @@ class IQChatMessage: MessageType {
         self.replyToMessageID = replyToMessageID
     }
 
-    convenience init(client: IQClient?, localId: Int, image: UIImage, fileName: String) {
+    convenience init(client: IQClient?, localId: Int, image: UIImage, fileName: String, replyToMessageID: Int?) {
         self.init(client: client, localId: localId)
         self.payload = .file
         self.file = IQFile(image: image, filename: fileName)
         self.uploadImage = image
         self.uploadFilename = fileName
+        self.replyToMessageID = replyToMessageID
     }
 
     convenience init(client: IQClient?, localId: Int, data: Data, fileName: String) {

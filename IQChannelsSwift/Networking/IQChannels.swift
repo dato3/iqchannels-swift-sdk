@@ -231,12 +231,12 @@ public class IQChannels {
         }
     }
 
-    func sendImage(_ image: UIImage, fileName: String?) {
+    func sendImage(_ image: UIImage, fileName: String?, replyMessageID: Int?) {
         guard let client = clientAuth?.client else { return }
 
         let localId = nextLocalId()
         let fileName = fileName ?? "image.jpeg"
-        let message = IQChatMessage(client: client, localId: localId, image: image, fileName: fileName)
+        let message = IQChatMessage(client: client, localId: localId, image: image, fileName: fileName, replyToMessageID: replyMessageID)
         let map = IQRelationMap(client: client)
         relations?.chatMessage(message, with: map)
 
@@ -1614,8 +1614,8 @@ extension IQChannels {
         instance.sendText(text, replyMessageID: replyMessageID)
     }
 
-    static func sendImage(_ image: UIImage, filename: String?) {
-        instance.sendImage(image, fileName: filename)
+    static func sendImage(_ image: UIImage, filename: String?, replyMessageID: Int?) {
+        instance.sendImage(image, fileName: filename, replyMessageID: replyMessageID)
     }
 
     static func sendData(_ data: Data, filename: String?) {
