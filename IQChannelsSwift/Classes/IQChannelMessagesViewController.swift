@@ -794,7 +794,6 @@ extension IQChannelMessagesViewController: IQChannelsMessagesListenerProtocol, I
         }
         DispatchQueue.main.async {
             self.messagesCollectionView.reloadItems(at: paths)      
-            self.scrollToBottomIfNeeded()
         }
     }
     
