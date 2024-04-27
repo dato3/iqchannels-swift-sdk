@@ -200,7 +200,7 @@ class IQChatMessage: MessageType {
         self.replyToMessageID = replyToMessageID
     }
 
-    convenience init(client: IQClient?, localId: Int, data: Data, fileName: String) {
+    convenience init(client: IQClient?, localId: Int, data: Data, fileName: String, replyToMessageID: Int?) {
         self.init(client: client, localId: localId)
         self.payload = .file
         if fileName.contains("gif") {
@@ -209,6 +209,7 @@ class IQChatMessage: MessageType {
             self.file = IQFile(data: data, filename: fileName)
         }
         self.uploadData = data
+        self.replyToMessageID = replyToMessageID
         self.uploadFilename = fileName
     }
     

@@ -50,7 +50,6 @@ class IQMediaMessageCell: MessageContentCell {
         messageContainerView.addSubview(timestampContainer)
         timestampContainer.addSubview(timestampView)
         messageContainerView.isUserInteractionEnabled = true
-        replyView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(replyViewDidTap)))
         setupConstraints()
     }
     
@@ -107,18 +106,19 @@ class IQMediaMessageCell: MessageContentCell {
     
     /// Handle tap gesture on contentView and its subviews.
     open override func handleTapGesture(_ gesture: UIGestureRecognizer) {
-        let touchLocation = gesture.location(in: imageView)
-
-        guard imageView.frame.contains(touchLocation) else {
-            super.handleTapGesture(gesture)
+        let touchLocation = gesture.location(in: messageContainerView)
+        
+        if !replyView.isHidden, replyView.frame.contains(touchLocation){
+            replyViewDelegate?.cell(self, didTapReplyView: replyView)
             return
         }
-        delegate?.didTapImage(in: self)
-    }
-    
-    @objc private func replyViewDidTap(){
-        replyViewDelegate?.cell(self, didTapReplyView: replyView)
-    }
+        
+        if imageView.frame.contains(touchLocation) {
+            delegate?.didTapImage(in: self)
+            return
+        }
 
+        super.handleTapGesture(gesture)
+    }
     
 }

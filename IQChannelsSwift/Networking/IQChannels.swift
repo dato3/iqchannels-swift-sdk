@@ -250,12 +250,12 @@ public class IQChannels {
         }
     }
 
-    func sendData(_ data: Data, fileName: String?) {
+    func sendData(_ data: Data, fileName: String?, replyMessageID: Int?) {
         guard let client = clientAuth?.client else { return }
 
         let localId = nextLocalId()
         let fileName = fileName ?? "data"
-        let message = IQChatMessage(client: client, localId: localId, data: data, fileName: fileName)
+        let message = IQChatMessage(client: client, localId: localId, data: data, fileName: fileName, replyToMessageID: replyMessageID)
         let map = IQRelationMap(client: client)
         relations?.chatMessage(message, with: map)
 
@@ -1618,8 +1618,8 @@ extension IQChannels {
         instance.sendImage(image, fileName: filename, replyMessageID: replyMessageID)
     }
 
-    static func sendData(_ data: Data, filename: String?) {
-        instance.sendData(data, fileName: filename)
+    static func sendData(_ data: Data, filename: String?, replyMessageID: Int?) {
+        instance.sendData(data, fileName: filename, replyMessageID: replyMessageID)
     }
 
     static func retryUpload(_ localId: Int) {

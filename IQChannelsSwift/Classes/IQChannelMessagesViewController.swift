@@ -150,6 +150,7 @@ open class IQChannelMessagesViewController: MessagesViewController, UIGestureRec
                 let cell = messagesCollectionView.dequeueReusableCell(IQFilePreviewCell.self, for: indexPath)
                 cell.configure(with: message, at: indexPath, and: messagesCollectionView)
                 cell.delegate = self
+                cell.replyViewDelegate = self
                 slideCellManager.add(cell)
                 return cell
             }
@@ -505,7 +506,7 @@ extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UIN
                 item.loadDataRepresentation(forTypeIdentifier: UTType.gif.identifier) { data, _ in
                     guard let data else { return }
                     DispatchQueue.main.async {
-                        self.sendData(data: data, filename: "gif")
+                        self.sendData(data: data, filename: "gif", replyMessageID: self._messageToReply?.id)
                     }
                 }
             } else {
@@ -527,7 +528,7 @@ extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UIN
         if let url = info[UIImagePickerControllerImageURL] as? URL,
            url.pathExtension == "gif",
            let data = try? Data(contentsOf: url){
-            sendData(data: data, filename: "gif")
+            sendData(data: data, filename: "gif", replyMessageID: _messageToReply?.id)
             return
         }
         
@@ -561,7 +562,7 @@ extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UIN
         alertController.addAction(.init(title: "Отправить", style: .default, handler: { _ in
             files.enumerated().forEach { index, turtle in
                 DispatchQueue.main.asyncAfter(deadline: .now() + (Double(index) * 0.5)) {
-                    self.sendData(data: turtle.data, filename: turtle.filename)
+                    self.sendData(data: turtle.data, filename: turtle.filename, replyMessageID: self._messageToReply?.id)
                 }
             }
             files.forEach { data, filename in
@@ -579,9 +580,9 @@ extension IQChannelMessagesViewController: UIImagePickerControllerDelegate & UIN
         present(alertController, animated: true)
     }
     
-    public func sendData(data: Data, filename: String?) {
+    public func sendData(data: Data, filename: String?, replyMessageID: Int?) {
         reply(to: nil)
-        IQChannels.sendData(data, filename: filename)
+        IQChannels.sendData(data, filename: filename, replyMessageID: replyMessageID)
     }
     
     public func sendImage(_ image: UIImage, filename: String?, replyMessageID: Int?) {
